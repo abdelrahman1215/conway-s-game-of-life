@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include "../headers/board_state.h"
+#include "../headers/proccess.h"
 
 #define state_width 17
 

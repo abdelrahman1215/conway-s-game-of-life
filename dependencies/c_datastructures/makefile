@@ -26,22 +26,18 @@ data_tests:
 hashmap:
 	gcc -c src/hashmap.c -o bin/hashmap.o
 	ar rcs bin/libhashmap.a bin/hashmap.o
-	del bin\hashmap.o
 	
 linked_list:
 	gcc -c src/linked_list.c -o bin/linked_list.o
 	ar rcs bin/liblinked_list.a bin/linked_list.o
-	del bin\linked_list.o
 
 dynamic_array:
 	gcc -c src/dynamic_array.c -o bin/dynamic_array.o
 	ar rcs bin/libdynamic_array.a bin/dynamic_array.o
-	del bin\dynamic_array.o
 
 AVL_tree:
 	gcc -c src/AVL_tree.c -o bin/AVL_tree.o
 	ar rcs bin/libAVL_tree.a bin/AVL_tree.o
-	del bin\AVL_tree.o
 
 libs:
 	make hashmap

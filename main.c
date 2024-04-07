@@ -1,4 +1,4 @@
-#include "src/board_state.c"
+#include "headers/proccess.h"
 #include <assert.h>
 
 int main(){

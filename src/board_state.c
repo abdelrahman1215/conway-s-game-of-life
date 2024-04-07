@@ -3,21 +3,18 @@
 
 #include <stdlib.h>
 #include "../dependencies/c_datastructures/headers/linked_list.h"
-
-typedef enum cell_state{dead = 0 , alive = 1} cell_state;
-
-#define state_err -1
+#include "../headers/board_state.h"
 
 typedef struct cell{
     cell_state state;
     unsigned lookups;
 }cell;
 
-typedef struct board_state{
+struct board_state{
     unsigned width , height;
     cell **cells;
     linked_list *check_list;
-}board_state;
+};
 
 typedef struct coord{
     unsigned x , y;
@@ -106,6 +103,14 @@ cell_state lookup_cell_state(board_state *state_ptr , unsigned x , unsigned y){
     target.lookups++;
     
     return target.state;
+}
+
+linked_list *alive_list(board_state *state_ptr){
+    if(state_ptr != NULL){
+        return state_ptr -> check_list;
+    }
+
+    return NULL;
 }
 
 #endif

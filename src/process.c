@@ -4,50 +4,47 @@
 
 #define state_width 17
 
-typedef struct board_state{
-    char state[state_width][state_width];
-}board_state;
+cell_state check(board_state *state_ptr , unsigned x , unsigned y){
+    coord position = {.x = x , .y = y};
 
-board_state empty_state(){
-    board_state ret;
-    for(unsigned i = 0 ; i < state_width ; i++){
-        for(unsigned j = 0 ; j < state_width ; j++){
-            ret.state[i][j] = 0;
-        }
+    if(state_ptr -> cells[y][x].state == 0 && state_ptr -> cells[y][x].lookups == 3){
+        position.x = x;
+        position.y = y;
+        linked_list_add_node(&position , sizeof(coord) , NULL , state_ptr -> check_list);
     }
 
-    return ret;
+    return state_ptr -> cells[y][x].state;
 }
 
-unsigned alive_neighbors(board_state state , unsigned x , unsigned y){
+unsigned char alive_neighbors(board_state *state , unsigned x , unsigned y){
     unsigned ret = 0;
 
     if(x < state_width){
-        ret += state.state[y][x + 1];
+        ret += check(state , x + 1 , y);
         if(y < state_width){
-            ret += state.state[y + 1][x + 1];
-            ret += state.state[y + 1][x];
+            ret += check(state , x + 1 , y + 1);
+            ret += check(state , x , y + 1);
         }
         
         if(y > 0){
-            ret += state.state[y - 1][x + 1];
-            ret += state.state[y - 1][x];
+            ret += check(state , x + 1 , y - 1);
+            ret += check(state , x , y - 1);
         }
     }
 
     if(x > 0){
-        ret += state.state[y][x - 1];
+        ret += check(state , x - 1 , y);
         if(y < state_width){
-            ret += state.state[y + 1][x - 1];
+            ret += check(state , x - 1 , y + 1);
             if(x == state_width){
-                ret += state.state[y + 1][x];
+                ret += check(state , x , y + 1);
             }
         }
 
         if(y > 0){
-            ret += state.state[y - 1][x - 1];
+            ret += check(state , x - 1 , y - 1);
             if(x == state_width){
-                ret += state.state[y - 1][x];
+                ret += check(state , x , y - 1);
             }
         }
     }
@@ -55,25 +52,26 @@ unsigned alive_neighbors(board_state state , unsigned x , unsigned y){
     return ret;
 }
 
-board_state new_state(board_state old_state){
-    board_state ret = empty_state();
+board_state *update_board_state(board_state *state_ptr){
+    board_state *ret =  new_board_state(state_ptr -> height , state_ptr -> height);
+    coord *position;
+    unsigned char alive_cells = 0;
 
-    char current;
-    for(unsigned y = 0 ; y < state_width ; y++){
-        for(unsigned x = 0 ; x < state_width ; x++){
-            current = old_state.state[y][x];
-            unsigned alive = alive_neighbors(old_state , x , y);
-            if(current == 1 && (alive > 3 || alive <= 1)){
-                ret.state[y][x] = 0;
-                continue;
-            }
+    u64 i = 0;
+    for(node *nd = linked_list_get_first_node(state_ptr -> check_list) ; nd != NULL ; nd = linked_list_get_next_node(nd) , i++){
+        position  = (coord *)linked_list_get_obj_ptr(nd);
+        alive_cells = alive_neighbors(state_ptr , position -> x , position -> y);
+        if(state_ptr -> cells[position -> y][position -> x].state == alive && (alive_cells <= 1 || alive_cells > 3)){
+            set_cell(ret , position -> x , position -> y , dead);
+        }else if(state_ptr -> cells[position -> y][position -> x].state == alive && alive_cells == 3){
+            set_cell(ret , position -> x , position -> y , alive);
+        }else{
+            set_cell(ret , position -> x , position -> y , state_ptr -> cells[position -> y][position -> x].state);
+        }
 
-            if(current == 0 && alive == 3){
-                ret.state[y][x] = 1;
-                continue;
-            }
-
-            ret.state[y][x] = old_state.state[y][x];
+        if(state_ptr -> cells[position -> y][position -> x].state == dead){
+            linked_list_delete_node(i , state_ptr -> check_list);
+            i--;
         }
     }
 

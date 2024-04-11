@@ -16,10 +16,6 @@ struct board_state{
     linked_list *check_list;
 };
 
-typedef struct coord{
-    unsigned x , y;
-}coord;
-
 
 
 board_state *new_board_state(unsigned height , unsigned width){
@@ -99,18 +95,56 @@ cell_state lookup_cell_state(board_state *state_ptr , unsigned x , unsigned y){
     if(state_ptr == NULL) return state_err;
     if(x >= state_ptr -> width || y >= state_ptr -> height) return state_err;
 
-    cell target = state_ptr -> cells[y][x];
-    target.lookups++;
+    cell *target = state_ptr -> cells[y] + x;
+    target -> lookups++;
+
+    if(target -> lookups == 3 && target -> state == dead){
+        coord cd = {.x = x , .y = y};
+        linked_list_add_node(&cd , sizeof(coord) , NULL , state_ptr -> check_list);
+    }
     
-    return target.state;
+    return target -> state;
 }
 
 linked_list *alive_list(board_state *state_ptr){
-    if(state_ptr != NULL){
-        return state_ptr -> check_list;
+    if(state_ptr == NULL){
+        return NULL;
     }
 
-    return NULL;
+    linked_list *ret = new_linked_list();
+    coord cd;
+    for(node *nd = linked_list_get_first_node(state_ptr -> check_list) ; nd != NULL ; nd = linked_list_get_next_node(nd)){
+        cd = *(coord *)linked_list_get_obj_ptr(nd);
+        if(state_ptr -> cells[cd.y][cd.x].state == alive){
+            linked_list_add_node(&cd , sizeof(coord) , NULL , ret);
+        }
+    }
+
+    return ret;
+}
+
+i64 get_board_width(board_state *state_ptr){
+    if(state_ptr == NULL){
+        return -1;
+    }
+
+    return state_ptr -> width;
+}
+
+i64 get_board_height(board_state *state_ptr){
+    if(state_ptr == NULL){
+        return -1;
+    }
+
+    return state_ptr -> height;
+}
+
+linked_list *get_check_list(board_state *state_ptr){
+    if(state_ptr == NULL){
+        return NULL;
+    }
+
+    return state_ptr -> check_list;
 }
 
 #endif

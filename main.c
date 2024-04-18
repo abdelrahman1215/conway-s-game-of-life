@@ -18,12 +18,6 @@ int main(){
 
     board_state *old_state;
 
-    FILE *debug = fopen("debug.txt" , "w");
-
-    fprintf(debug , "test");
-
-    fclose(debug);
-
     initscr();
     refresh();
     curs_set(0);

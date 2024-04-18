@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include "../headers/board_state.h"
 #include "../headers/process_state.h"
 #include <stddef.h>

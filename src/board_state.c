@@ -81,7 +81,7 @@ void set_cell(board_state *state_ptr , unsigned x , unsigned y , cell_state new_
 
         for(u64 i = 0 ; nd != NULL ; nd = linked_list_get_next_node(nd) , i++){
             cd = linked_list_get_obj_ptr(nd);
-            if(*(u64 *)cd== *(u64 *)&position){
+            if(cd -> x == position.x && cd -> y == position.y){
                 linked_list_delete_node(i , state_ptr -> check_list);
                 break;
             }
@@ -91,16 +91,31 @@ void set_cell(board_state *state_ptr , unsigned x , unsigned y , cell_state new_
     target -> state = new_state;
 }
 
-cell_state lookup_cell_state(board_state *state_ptr , unsigned x , unsigned y){
+cell_state lookup_cell_state(board_state *state_ptr , unsigned x , unsigned y , bool log_lookup){
     if(state_ptr == NULL) return state_err;
     if(x >= state_ptr -> width || y >= state_ptr -> height) return state_err;
 
     cell *target = state_ptr -> cells[y] + x;
-    target -> lookups++;
 
-    if(target -> lookups == 3 && target -> state == dead){
-        coord cd = {.x = x , .y = y};
-        linked_list_add_node(&cd , sizeof(coord) , NULL , state_ptr -> check_list);
+    if(log_lookup == true){
+        target -> lookups++;
+        
+        if(target -> lookups == 3 && target -> state == dead){
+            coord cd = {.x = x , .y = y};
+            linked_list_add_node(&cd , sizeof(coord) , NULL , state_ptr -> check_list);
+        }
+
+        if(target -> lookups > 3 && target -> state == dead){
+            coord *cd_ptr;
+            u64 i = 0;
+            for(node *nd = linked_list_get_first_node(state_ptr -> check_list) ; nd != NULL ; nd = linked_list_get_next_node(nd) , i++){
+                cd_ptr = linked_list_get_obj_ptr(nd);
+                if(cd_ptr -> x == x && cd_ptr -> y == y){
+                    linked_list_delete_node(i , state_ptr -> check_list);
+                    break;
+                }
+            }
+        }
     }
     
     return target -> state;

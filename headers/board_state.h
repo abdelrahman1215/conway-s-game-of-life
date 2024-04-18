@@ -1,6 +1,7 @@
 #ifndef BOARD_STATE_H
 #define BOARD_STATE_H
 #include "../dependencies/c_datastructures/headers/linked_list.h"
+#include <stddef.h>
 
 typedef struct board_state board_state;
 
@@ -16,7 +17,7 @@ void destroy_board_state(board_state *state_ptr);
 
 void set_cell(board_state *state_ptr , unsigned x , unsigned y , cell_state new_state);
 
-cell_state lookup_cell_state(board_state *state_ptr , unsigned x , unsigned y);
+cell_state lookup_cell_state(board_state *state_ptr , unsigned x , unsigned y , bool log_lookup);
 
 linked_list *alive_list(board_state *state_ptr);
 

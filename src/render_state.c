@@ -1,7 +1,6 @@
 #include "../headers/render_state.h"
 #include "../dependencies/c_datastructures/headers/linked_list.h"
 #include <stdlib.h>
-#include <pdcurses/curses.h>
 
 struct frame {
     unsigned height;
@@ -9,8 +8,8 @@ struct frame {
     char **content;
 };
 
-#define empty_cell '.'
-#define alive_cell '#'
+#define empty_cell (char) 250 // ·
+#define alive_cell (char) 254 // ■ 
 
 frame *new_frame(unsigned width , unsigned height){
     //used <= 0 instead of == 0 although it is unsigned to silence a clang-tidy warning
@@ -118,8 +117,8 @@ void render_state(board_state *state_ptr , WINDOW *target_win , unsigned start_x
     }
 
     if(end_x - start_x > translation -> width || end_y - start_y > translation -> height){
-        destroy_frame(translation);
-        return;
+        end_x = (translation -> width) * 2 + start_x;
+        end_y = (translation -> height) + start_y;
     }
 
 
@@ -127,7 +126,7 @@ void render_state(board_state *state_ptr , WINDOW *target_win , unsigned start_x
     char row[row_width];
     row[row_width - 1] = '\000';
 
-    for(unsigned i = 0 , cur_y = start_y ; i < end_y - start_y && i < translation -> height && cur_y < end_y ; i++ , cur_y ++){
+    for(unsigned i = 0 , cur_y = start_y ; i <= end_y - start_y && i < translation -> height && cur_y <= end_y ; i++ , cur_y ++){
         for(unsigned j = 0 ; j < translation -> width && (j * 2) + 1 < row_width ; j++){
             row[(j * 2) + 1] = ' ';
             row[j * 2] = translation -> content[i][j];

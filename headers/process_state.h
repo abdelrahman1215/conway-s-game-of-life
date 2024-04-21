@@ -3,6 +3,6 @@
 
 #include "board_state.h"
 
-board_state *update_board_state(board_state *state_ptr);
+void update_board_state(board_state *state_ptr);
 
 #endif

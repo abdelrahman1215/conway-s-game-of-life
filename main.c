@@ -1,5 +1,5 @@
 #include "headers/render_state.h"
-#include "headers/process_state.h"
+#include "src/process_state.c"
 #include "headers/board_state.h"
 #include <assert.h>
 #include <pdcurses/curses.h>
@@ -16,8 +16,6 @@ int main(){
     const unsigned nano_per_sec = 1000000000;
     struct timespec spec = {.tv_nsec =  nano_per_sec / 2, .tv_sec = 0};
 
-    board_state *old_state;
-
     initscr();
     refresh();
     curs_set(0);
@@ -30,9 +28,7 @@ int main(){
         flushinp();
         render_state(test_state , stdscr , 0 , 0 , win_width , win_height - 1);
 
-        old_state = test_state;
-        test_state = update_board_state(test_state);
-        destroy_board_state(old_state);
+        update_board_state(test_state);
 
         nanosleep(&spec , NULL);
         int input = getch();

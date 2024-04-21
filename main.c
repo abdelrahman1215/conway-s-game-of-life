@@ -1,5 +1,5 @@
 #include "headers/render_state.h"
-#include "src/process_state.c"
+#include "headers/process_state.h"
 #include "headers/board_state.h"
 #include <assert.h>
 #include <pdcurses/curses.h>
@@ -14,7 +14,7 @@ int main(){
     set_cell(test_state , 3 , 3 , alive);
 
     const unsigned nano_per_sec = 1000000000;
-    struct timespec spec = {.tv_nsec =  nano_per_sec / 2, .tv_sec = 0};
+    struct timespec spec = {.tv_nsec =  nano_per_sec / 4, .tv_sec = 0};
 
     initscr();
     refresh();

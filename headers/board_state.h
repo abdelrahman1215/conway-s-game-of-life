@@ -25,4 +25,6 @@ i64 get_board_width(board_state *state_ptr);
 i64 get_board_height(board_state *state_ptr);
 linked_list *get_check_list(board_state *state_ptr);
 
+void reset_lists(board_state *state_ptr);
+
 #endif

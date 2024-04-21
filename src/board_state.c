@@ -13,7 +13,7 @@ typedef struct cell{
 struct board_state{
     unsigned width , height;
     cell **cells;
-    linked_list *check_list;
+    linked_list *check_list ,  *lookedup_list;
 };
 
 
@@ -54,6 +54,15 @@ board_state *new_board_state(unsigned height , unsigned width){
         return NULL;
     }
 
+    ret -> lookedup_list = new_linked_list();
+    if(ret -> lookedup_list == NULL){
+        free(ret -> cells);
+        destroy_linked_list(ret -> lookedup_list);
+        free(ret);
+        free(cells);
+        return NULL;
+    }
+
     return ret;
 }
 
@@ -73,7 +82,7 @@ void set_cell(board_state *state_ptr , unsigned x , unsigned y , cell_state new_
 
     cell *target = state_ptr -> cells[y] + x;
     coord position = {.x = x , .y = y};
-    if(new_state == alive && target -> state == dead){
+    if(new_state == alive){
         linked_list_add_node(&position , sizeof(coord) , NULL , state_ptr -> check_list);
     }else if(new_state == dead && target -> state == alive){
         node *nd = linked_list_get_first_node(state_ptr -> check_list);
@@ -99,8 +108,11 @@ cell_state lookup_cell_state(board_state *state_ptr , unsigned x , unsigned y , 
 
     if(log_lookup == true){
         target -> lookups++;
-        
-        if(target -> lookups == 3 && target -> state == dead){
+
+        if(target -> lookups == 1){
+            coord position = {.x = x , .y = y};
+            linked_list_add_node(&position , sizeof(coord) , NULL , state_ptr -> lookedup_list);
+        }else if(target -> lookups == 3 && target -> state == dead){
             coord cd = {.x = x , .y = y};
             linked_list_add_node(&cd , sizeof(coord) , NULL , state_ptr -> check_list);
         }
@@ -160,6 +172,22 @@ linked_list *get_check_list(board_state *state_ptr){
     }
 
     return state_ptr -> check_list;
+}
+
+void reset_lists(board_state *state_ptr){
+    if(state_ptr == NULL) return;
+
+    destroy_linked_list(state_ptr -> check_list);
+    state_ptr -> check_list = new_linked_list();
+
+    coord *cd_ptr = NULL;
+    for(node *nd = linked_list_get_first_node(state_ptr -> lookedup_list) ; nd != NULL ; nd = linked_list_get_next_node(nd)){
+        cd_ptr = linked_list_get_obj_ptr(nd);
+        state_ptr -> cells[cd_ptr -> y][cd_ptr -> x].lookups = 0;
+    }
+
+    destroy_linked_list(state_ptr -> lookedup_list);
+    state_ptr -> lookedup_list = new_linked_list();
 }
 
 #endif

@@ -1,20 +1,20 @@
 #include "headers/render_state.h"
 #include "headers/process_state.h"
 #include "headers/board_state.h"
+#include "headers/globals.h"
+#include "headers/input.h"
 #include <assert.h>
 #include <pdcurses/curses.h>
 #include <time.h>
 
 int main(){
-    board_state *test_state = new_board_state(1000 , 1000);
-    set_cell(test_state , 2 , 1 , alive);
-    set_cell(test_state , 3 , 2 , alive);
-    set_cell(test_state , 1 , 3 , alive);
-    set_cell(test_state , 2 , 3 , alive);
-    set_cell(test_state , 3 , 3 , alive);
+    board = new_board_state(1000 , 1000);
 
     const unsigned nano_per_sec = 1000000000;
-    struct timespec spec = {.tv_nsec =  nano_per_sec / 4, .tv_sec = 0};
+    speed = 4;
+    struct timespec spec = {.tv_nsec =  nano_per_sec / speed, .tv_sec = 0};
+
+    pause = true;
 
     initscr();
     refresh();
@@ -24,15 +24,27 @@ int main(){
 
     unsigned win_width = getmaxx(stdscr) , win_height = getmaxy(stdscr);
 
+    state_start_x = 2;
+    state_start_y = 1;
+
+    state_end_x = win_width - 1;
+    state_end_y = win_height - 2;
+
+    pthread_t thread_id;
+    pthread_create(&thread_id , NULL , handle_input , NULL );
+
+    box(stdscr , 0 , 0);
+
     while(1){
-        flushinp();
-        render_state(test_state , stdscr , 0 , 0 , win_width , win_height - 1);
+        render_state(board , stdscr , state_start_x , state_start_y , state_end_x , state_end_y);
 
-        update_board_state(test_state);
+        if(pause == false){
+            update_board_state(board);
+            nanosleep(&spec , NULL);
+        }
 
-        nanosleep(&spec , NULL);
-        int input = getch();
-        switch(input){
+        //int input = getch();
+        /*switch(input){
             case 'q':
             case 'Q':
                 exit(0);
@@ -52,10 +64,12 @@ int main(){
 		        }
 
                 break;
-        }
+        }*/
     }
 
+    pthread_join(thread_id , NULL);
     endwin();
 
-    destroy_board_state(test_state);
+
+    destroy_board_state(board);
 }

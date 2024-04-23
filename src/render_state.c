@@ -1,4 +1,5 @@
 #include "../headers/render_state.h"
+#include "../headers/board_state.h"
 #include "../dependencies/c_datastructures/headers/linked_list.h"
 #include <stdlib.h>
 
@@ -65,7 +66,12 @@ frame *translate_state(board_state *state_ptr){
         return NULL;
     }
 
+    lock_state();
+
     linked_list *alive_cells = alive_list(state_ptr);
+
+    unlock_state();
+    
     if(alive_cells == NULL){
         return NULL;
     }
@@ -93,6 +99,10 @@ i128 min(i128 val_1 , i128 val_2){
 }
 
 void render_state(board_state *state_ptr , WINDOW *target_win , unsigned start_x , unsigned start_y , unsigned end_x , unsigned end_y){
+    if(stdscr == NULL){
+        return;
+    }
+
     if(state_ptr == NULL){
         return;
     }
@@ -122,14 +132,17 @@ void render_state(board_state *state_ptr , WINDOW *target_win , unsigned start_x
     }
 
 
-    unsigned row_width = min(win_width , end_x - start_x) + 1;
+    unsigned row_width = min(win_width , end_x - start_x);
+    row_width += (row_width % 2 == 0);
     char row[row_width];
     row[row_width - 1] = '\000';
 
     for(unsigned i = 0 , cur_y = start_y ; i <= end_y - start_y && i < translation -> height && cur_y <= end_y ; i++ , cur_y ++){
-        for(unsigned j = 0 ; j < translation -> width && (j * 2) + 1 < row_width ; j++){
-            row[(j * 2) + 1] = ' ';
+        for(unsigned j = 0 ; j < translation -> width && (j * 2) < row_width - 1 ; j++){
             row[j * 2] = translation -> content[i][j];
+            if((j * 2) + 1 < row_width - 1){
+                row[(j * 2) + 1] = ' ';
+            }
         }
 
         mvwprintw(target_win , cur_y , start_x , "%s" , row);

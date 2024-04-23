@@ -2,8 +2,10 @@
 #define BOARD_STATE_C
 
 #include <stdlib.h>
+#include <stddef.h>
 #include "../dependencies/c_datastructures/headers/linked_list.h"
 #include "../headers/board_state.h"
+#include "../headers/globals.h"
 
 typedef struct cell{
     cell_state state;
@@ -188,6 +190,25 @@ void reset_lists(board_state *state_ptr){
 
     destroy_linked_list(state_ptr -> lookedup_list);
     state_ptr -> lookedup_list = new_linked_list();
+}
+
+bool mut_initiated = false;
+
+void lock_state(){
+    if(mut_initiated == false){
+        pthread_mutex_init(&board_state_mutex , NULL);
+        mut_initiated = true;
+    }
+
+    pthread_mutex_lock(&board_state_mutex);
+}
+
+void unlock_state(){
+    if(mut_initiated == false){
+        return;
+    }
+
+    pthread_mutex_unlock(&board_state_mutex);
 }
 
 #endif

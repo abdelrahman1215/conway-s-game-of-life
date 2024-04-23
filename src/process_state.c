@@ -71,6 +71,9 @@ void update_board_state(board_state *state_ptr){
     u64 i = 0;
     cell_state state;
     set_target set;
+
+    lock_state();
+
     linked_list *check_list = get_check_list(state_ptr);
 
     for(node *nd = linked_list_get_first_node(check_list) ; nd != NULL ; nd = linked_list_get_next_node(nd) , i++){
@@ -107,4 +110,6 @@ void update_board_state(board_state *state_ptr){
         set_cell(state_ptr , set_ptr -> x , set_ptr -> y , set_ptr -> new_state);
 
     }
+
+    unlock_state();
 }

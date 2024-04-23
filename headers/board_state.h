@@ -27,4 +27,6 @@ linked_list *get_check_list(board_state *state_ptr);
 
 void reset_lists(board_state *state_ptr);
 
+void lock_state();
+void unlock_state();
 #endif

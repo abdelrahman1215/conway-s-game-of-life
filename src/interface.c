@@ -83,5 +83,14 @@ void render_reset_button(){
     mvprintw( reset_y , reset_start_x , " reset ");
 
     pthread_mutex_unlock(&print_mutex);
-    
+}
+
+void *display_coord(void *){
+    while(1){
+        pthread_mutex_lock(&print_mutex);
+
+        mvprintw( play_y , (win_width - 3) - 13 , "%c%c %i , %i %c%c" , 196 , 196 , x_indent , y_indent , 196 ,196 );
+
+        pthread_mutex_unlock(&print_mutex);
+    }
 }

@@ -1,6 +1,6 @@
 main:
 	make libs
-	gcc -Wall -g3 -o main.exe main.c -Lbin -lprocess_state -lrender_state -lboard_state -linput -l:pdcurses.a
+	gcc -Wall -g3 -o main.exe main.c -Lbin -lprocess_state -lrender_state -lboard_state -linput -linterface -l:pdcurses.a
 
 test:
 	gcc -Wall -g3 test.c -o test.exe -l:pdcurses.a
@@ -19,10 +19,15 @@ render_state:
 
 input:
 	gcc -c src/input.c -o bin/input.o
-	ar rcs bin/libinput.a bin/input.o bin/libprocess_state.a C:/msys64/mingw64/lib/pdcurses.a
+	ar rcs bin/libinput.a bin/input.o bin/libboard_state.a C:/msys64/mingw64/lib/pdcurses.a
+
+interface:
+	gcc -c src/interface.c -o bin/interface.o
+	ar rcs bin/libinterface.a bin/interface.o bin/libboard_state.a C:/msys64/mingw64/lib/pdcurses.a
 
 libs:
 	make board_state
 	make process_state
 	make render_state
 	make input
+	make interface

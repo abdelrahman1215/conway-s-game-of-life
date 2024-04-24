@@ -1,5 +1,5 @@
 PDcurses_Path = C:/msys64/mingw64/lib/pdcurses.a
-Linked_List_Path = C:/Users/abder/Desktop/conway\'s/dependencies/c_datastructures/bin/linked_list.o
+Linked_List_Path = dependencies/c_datastructures/bin/linked_list.o
 
 main:
 	make liball

@@ -101,7 +101,7 @@ void update_board_state(board_state *state_ptr){
         linked_list_add_node(&set , sizeof(set_target) , NULL , set_list);
     }
 
-    reset_lists(state_ptr);
+    reset_board(state_ptr);
     
     set_target *set_ptr = NULL;
     for(node *nd = linked_list_get_first_node(set_list) ; nd != NULL ; nd = linked_list_get_next_node(nd)){

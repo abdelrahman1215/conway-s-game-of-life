@@ -29,6 +29,8 @@ void handle_mouse_input(){
         set_cell(board , x , y , new_state);
 
         unlock_state();
+    } else if(event.x >= reset_start_x && event.x <= reset_end_x && event.y == reset_y){
+        reset_board(board);
     }
 }
 

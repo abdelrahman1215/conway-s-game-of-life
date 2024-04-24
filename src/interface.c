@@ -1,5 +1,6 @@
 #include "../headers/globals.h"
 #include "../headers/interface.h"
+#include "../headers/board_state.h"
 #include <pdcurses.h>
 #include <pthread.h>
 #include <stddef.h>
@@ -69,5 +70,18 @@ void *print_speed(void *){
 
         pthread_mutex_unlock(&print_mutex);
     }
+    
+}
+
+void render_reset_button(){
+    reset_y = play_y;
+    reset_end_x = play_start_x - 4;
+    reset_start_x = reset_end_x - 7;
+
+    pthread_mutex_lock(&print_mutex);
+
+    mvprintw( reset_y , reset_start_x , " reset ");
+
+    pthread_mutex_unlock(&print_mutex);
     
 }

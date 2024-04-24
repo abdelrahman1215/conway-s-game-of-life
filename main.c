@@ -46,6 +46,7 @@ int main(){
     pthread_create(&speed_thread , NULL , print_speed , NULL );
     render_exit_button();
     render_play_pause_button();
+    render_reset_button();
 
     while(1){
         

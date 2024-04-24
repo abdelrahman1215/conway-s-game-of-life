@@ -192,6 +192,17 @@ void reset_lists(board_state *state_ptr){
     state_ptr -> lookedup_list = new_linked_list();
 }
 
+void reset_board(board_state *state_ptr){
+    coord *cd_ptr;
+
+    for(node *nd = linked_list_get_first_node(state_ptr -> check_list) ; nd != NULL ; nd = linked_list_get_next_node(nd)){
+        cd_ptr = linked_list_get_obj_ptr(nd);
+        state_ptr -> cells[cd_ptr -> y][cd_ptr -> x].state = dead;
+    }
+
+    reset_lists(state_ptr);
+}
+
 bool mut_initiated = false;
 
 void lock_state(){

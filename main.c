@@ -14,7 +14,7 @@ int main(){
     pthread_mutex_init(&print_mutex , NULL);
 
     const unsigned nano_per_sec = 1000000000;
-    speed = 3;
+    speed = 2;
     struct timespec spec = {.tv_nsec =  nano_per_sec / speed, .tv_sec = 0};
 
     pause = true;
@@ -40,24 +40,28 @@ int main(){
     state_end_x = win_width - 1;
     state_end_y = win_height - 2;
 
-    pthread_t input_thread , interface_thread;
+    pthread_t input_thread , play_thread , speed_thread;
     pthread_create(&input_thread , NULL , handle_input , NULL );
-    pthread_create(&interface_thread , NULL , print_pause_play_state , NULL );
+    pthread_create(&play_thread , NULL , print_pause_play_state , NULL );
+    pthread_create(&speed_thread , NULL , print_speed , NULL );
     render_exit_button();
     render_play_pause_button();
 
     while(1){
-
-        /*(move( 0 , (win_width - 8) / 2 - 1 );
-        if(pause == true){
-            printw("%c puased %c" , 196 , 196 );
-        }else{
-            printw(" playing ");
-        }*/
-
+        
         render_state(board , stdscr , state_start_x , state_start_y , state_end_x , state_end_y);
 
         if(pause == false){
+            pthread_mutex_unlock(&speed_mutex);
+            if(speed == 1){
+                spec.tv_sec = 1;
+                spec.tv_nsec = 0;
+            }else{
+                spec.tv_sec = 0;
+                spec.tv_nsec = nano_per_sec / speed;
+            }
+            pthread_mutex_unlock(&speed_mutex);
+
             update_board_state(board);
             nanosleep(&spec , NULL);
         }

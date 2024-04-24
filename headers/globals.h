@@ -5,6 +5,8 @@
 #include <pthread.h>
 #include <stddef.h>
 
+#define speed_limit 100
+
 #define global __attribute__((__common__))
 
 global unsigned speed;
@@ -17,5 +19,6 @@ global bool pause;
 global unsigned x_indent , y_indent;
 global unsigned win_width , win_height;
 global pthread_mutex_t print_mutex;
+global pthread_mutex_t speed_mutex;
 
 #endif

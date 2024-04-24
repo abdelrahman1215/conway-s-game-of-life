@@ -4,3 +4,4 @@ game controls:
 * q or exit bottun -> quit
 * space or play/pause button -> play/pause
 * arrow keys or wasd -> move around the board
+* , and . -> decrease and increase speed

@@ -83,6 +83,25 @@ void handle_keyboard_input(int input){
             }
 
             break;
+
+        case '.':
+            if(speed < speed_limit){
+                pthread_mutex_lock(&speed_mutex);
+
+                speed ++;
+
+                pthread_mutex_unlock(&speed_mutex);
+            }
+
+            break;
+
+        case ',':
+            if(speed > 1){
+                speed --;
+            }
+
+            break;
+
     }
 }
 

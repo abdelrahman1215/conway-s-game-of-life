@@ -1,4 +1,5 @@
 #include "../headers/globals.h"
+#include "../headers/interface.h"
 #include <pdcurses.h>
 #include <pthread.h>
 #include <stddef.h>
@@ -57,4 +58,16 @@ void render_play_pause_button(){
     mvprintw( play_y , play_start_x , " play / pause ");
 
     pthread_mutex_unlock(&print_mutex);
+}
+
+void *print_speed(void *){
+
+    while (1){
+        pthread_mutex_lock(&print_mutex);
+
+        mvprintw( play_y , play_end_x + 4 , " %ix %c%c" , speed , 196 , 196 );
+
+        pthread_mutex_unlock(&print_mutex);
+    }
+    
 }

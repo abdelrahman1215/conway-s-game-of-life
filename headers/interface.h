@@ -4,5 +4,6 @@
 void *print_pause_play_state(void *);
 void render_exit_button();
 void render_play_pause_button();
+void *print_speed(void *);
 
 #endif

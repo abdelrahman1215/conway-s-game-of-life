@@ -1,33 +1,14 @@
+PDcurses_Path = C:/msys64/mingw64/lib/pdcurses.a
+Linked_List_Path = C:/Users/abder/Desktop/conway\'s/dependencies/c_datastructures/bin/linked_list.o
+
 main:
-	make libs
-	gcc -Wall -g3 -o main.exe main.c -Lbin -lprocess_state -lrender_state -lboard_state -linput -linterface -l:pdcurses.a
+	make liball
+	gcc -Wall -g3 -o main.exe main.c -Lbin -lall -l:pdcurses.a
 
-test:
-	gcc -Wall -g3 test.c -o test.exe -l:pdcurses.a
-
-board_state:
-	gcc -c src/board_state.c -o bin/board_state.o
-	ar rcs bin/libboard_state.a bin/board_state.o dependencies/c_datastructures/bin/liblinked_list.a
-
-process_state:
-	gcc -c src/process_state.c -o bin/process_state.o
-	ar rcs bin/libprocess_state.a bin/process_state.o bin/libboard_state.a dependencies/c_datastructures/bin/liblinked_list.a
-
-render_state:
-	gcc -c src/render_state.c -o bin/render_state.o
-	ar rcs bin/librender_state.a bin/render_state.o bin/libprocess_state.a C:/msys64/mingw64/lib/pdcurses.a
-
-input:
-	gcc -c src/input.c -o bin/input.o
-	ar rcs bin/libinput.a bin/input.o bin/libboard_state.a C:/msys64/mingw64/lib/pdcurses.a
-
-interface:
-	gcc -c src/interface.c -o bin/interface.o
-	ar rcs bin/libinterface.a bin/interface.o bin/libboard_state.a C:/msys64/mingw64/lib/pdcurses.a
-
-libs:
-	make board_state
-	make process_state
-	make render_state
-	make input
-	make interface
+liball:
+	gcc -c libsrc/process_state.c -o bin/process_state.o
+	gcc -c libsrc/render_state.c -o bin/render_state.o
+	gcc -c libsrc/board_state.c -o bin/board_state.o
+	gcc -c libsrc/interface.c -o bin/interface.o
+	gcc -c libsrc/input.c -o bin/input.o
+	ar rcs bin/liball.a bin/board_state.o bin/process_state.o bin/render_state.o bin/input.o bin/interface.o $(Linked_List_Path) $(PDcurses_Path)

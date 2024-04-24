@@ -1,6 +1,3 @@
-#ifndef BOARD_STATE_C
-#define BOARD_STATE_C
-
 #include <stdlib.h>
 #include <stddef.h>
 #include "../dependencies/c_datastructures/headers/linked_list.h"
@@ -221,5 +218,3 @@ void unlock_state(){
 
     pthread_mutex_unlock(&board_state_mutex);
 }
-
-#endif

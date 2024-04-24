@@ -40,8 +40,6 @@ void handle_keyboard_input(int input){
             break;
 
         case ' ':
-        case 'p':
-        case 'P':
             if(pause == true){
                 pause = false;
             }else{

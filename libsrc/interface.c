@@ -89,7 +89,7 @@ void *display_coord(void *){
     while(1){
         pthread_mutex_lock(&Print_Mutex);
 
-        mvprintw( Play_Y , (Win_Width - 3) - 13 , "%c%c %i , %i %c%c" , 196 , 196 ,X_Indent , Y_Indent , 196 ,196 );
+        mvprintw( 0 , 2 , " %i , %i %c%c%c%c" , X_Indent , Y_Indent , 196 , 196 , 196 , 196  );
 
         pthread_mutex_unlock(&Print_Mutex);
     }

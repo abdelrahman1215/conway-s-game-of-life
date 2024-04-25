@@ -9,11 +9,11 @@ game controls:
 
 how to build the project :
 * before building the project make sure to install pdcurses and pthreads (if you are on windows) 
-* pdcurses [https://sourceforge.net/projects/pdcurses/]
+* `[pdcurses]` `(https://sourceforge.net/projects/pdcurses/)`
 
 * then you just have to edit the CC variable in the makefile of the project and the c_datastructures submodule into what ever compiler you use
 
-*then just:
+* then just:
 ```
 make
 ```

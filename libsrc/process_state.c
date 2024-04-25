@@ -112,4 +112,6 @@ void update_board_state(board_state *state_ptr){
     }
 
     unlock_state();
+
+    destroy_linked_list(set_list);
 }

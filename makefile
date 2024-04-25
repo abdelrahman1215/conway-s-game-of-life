@@ -1,14 +1,14 @@
 PDcurses_Path = C:/msys64/mingw64/lib/pdcurses.a
-Linked_List_Path = dependencies/c_datastructures/bin/linked_list.o
+Linked_List_Path = dependencies/c_datastructures/bin/
+CC = gcc
 
 main:
-	make liball
-	gcc -Wall -g3 -o main.exe main.c -Lbin -lall -l:pdcurses.a
+	make objects
+	$(CC) -Wall -g3 -o main.exe main.c bin/board_state.o bin/process_state.o bin/render_state.o bin/interface.o bin/input.o -l:pdcurses.a -L$(Linked_List_Path) -llinked_list
 
-liball:
-	gcc -c libsrc/process_state.c -o bin/process_state.o
-	gcc -c libsrc/render_state.c -o bin/render_state.o
-	gcc -c libsrc/board_state.c -o bin/board_state.o
-	gcc -c libsrc/interface.c -o bin/interface.o
-	gcc -c libsrc/input.c -o bin/input.o
-	ar rcs bin/liball.a bin/board_state.o bin/process_state.o bin/render_state.o bin/input.o bin/interface.o $(Linked_List_Path) $(PDcurses_Path)
+objects:
+	$(CC) -c libsrc/process_state.c -o bin/process_state.o
+	$(CC) -c libsrc/render_state.c -o bin/render_state.o
+	$(CC) -c libsrc/board_state.c -o bin/board_state.o
+	$(CC) -c libsrc/interface.c -o bin/interface.o
+	$(CC) -c libsrc/input.c -o bin/input.o

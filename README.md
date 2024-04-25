@@ -12,7 +12,8 @@ how to build the project :
 * pdcurses [https://sourceforge.net/projects/pdcurses/]
 
 * then you just have to edit the CC variable in the makefile of the project and the c_datastructures submodule into what ever compiler you use
-then just:
+
+*then just:
 ```
 make
 ```

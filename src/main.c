@@ -1,9 +1,9 @@
-#include "headers/process_state.h"
-#include "headers/render_state.h"
-#include "headers/board_state.h"
-#include "headers/interface.h"
-#include "headers/globals.h"
-#include "headers/input.h"
+#include "../headers/process_state.h"
+#include "../headers/render_state.h"
+#include "../headers/board_state.h"
+#include "../headers/interface.h"
+#include "../headers/globals.h"
+#include "../headers/input.h"
 
 #include <pdcurses/curses.h>
 #include <assert.h>

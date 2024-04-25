@@ -4,7 +4,7 @@ CC = gcc
 main:
 	$(MAKE) -C c_datastructures linked_list
 	$(MAKE) objects
-	$(CC) -Wall -g3 -o main.exe main.c bin/board_state.o bin/process_state.o bin/render_state.o bin/interface.o bin/input.o -l:pdcurses.a -L$(Linked_List_Path) -llinked_list
+	$(CC) -Wall -g3 -o main.exe main.c bin/board_state.o bin/process_state.o bin/render_state.o bin/interface.o bin/input.o -lpdcurses -L$(Linked_List_Path) -llinked_list
 
 objects:
 	$(shell mkdir bin)

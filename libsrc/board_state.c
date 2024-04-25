@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <stddef.h>
-#include "../dependencies/c_datastructures/headers/linked_list.h"
 #include "../headers/board_state.h"
 #include "../headers/globals.h"
 

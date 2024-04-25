@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "../headers/board_state.h"
 #include "../headers/process_state.h"
-#include "../dependencies/c_datastructures/headers/linked_list.h"
+#include "../c_datastructures/headers/linked_list.h"
 #include <stddef.h>
 
 i64 alive_neighbors(board_state *state_ptr , i64 x , i64 y){

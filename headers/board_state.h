@@ -1,6 +1,6 @@
 #ifndef BOARD_STATE_H
 #define BOARD_STATE_H
-#include "../dependencies/c_datastructures/headers/linked_list.h"
+#include "../c_datastructures/headers/linked_list.h"
 #include <stddef.h>
 
 typedef struct board_state board_state;

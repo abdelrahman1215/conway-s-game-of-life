@@ -1,4 +1,4 @@
-#include "../dependencies/c_datastructures/headers/linked_list.h"
+#include "../c_datastructures/headers/linked_list.h"
 #include "../headers/render_state.h"
 #include "../headers/board_state.h"
 #include "../headers/globals.h"
@@ -96,7 +96,7 @@ frame *translate_state(board_state *state_ptr){
     return ret;
 }
 
-i128 min(i128 val_1 , i128 val_2){
+i128 minimum(i128 val_1 , i128 val_2){
     return val_1 < val_2 ? val_1 : val_2;
 }
 
@@ -134,7 +134,7 @@ void render_state(board_state *state_ptr , WINDOW *target_win , unsigned start_x
     }
 
 
-    unsigned row_width = min(win_width , end_x - start_x);
+    unsigned row_width = minimum(win_width , end_x - start_x);
     row_width += (row_width % 2 == 0);
     char row[row_width];
     row[row_width - 1] = '\000';

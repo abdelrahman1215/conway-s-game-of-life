@@ -2,7 +2,7 @@
 #define TRANSLATE_STATE_H
 
 #include "../headers/board_state.h"
-#include <pdcurses/curses.h>
+#include <pdcurses.h>
 
 typedef struct frame frame;
 

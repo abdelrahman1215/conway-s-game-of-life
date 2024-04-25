@@ -11,13 +11,13 @@
 
 int main(){
 
-    pthread_mutex_init(&print_mutex , NULL);
+    pthread_mutex_init(&Print_Mutex , NULL);
 
     const unsigned nano_per_sec = 1000000000;
-    speed = 2;
-    struct timespec spec = {.tv_nsec =  nano_per_sec / speed, .tv_sec = 0};
+    Speed = 2;
+    struct timespec spec = {.tv_nsec =  nano_per_sec / Speed, .tv_sec = 0};
 
-    pause = true;
+    Pause = true;
 
     initscr();
     refresh();
@@ -26,19 +26,19 @@ int main(){
     noecho();
     box(stdscr , 0 , 0);
 
-    win_width = getmaxx(stdscr) ;
-    win_height = getmaxy(stdscr);
+    Win_Width = getmaxx(stdscr) ;
+    Win_Height = getmaxy(stdscr);
 
-    board = new_board_state(win_height * 3 , win_width * 3);
+    Board = new_board_state(Win_Height * 3 , Win_Width * 3);
 
-    x_indent = win_width;
-    y_indent = win_height;
+    X_Indent = Win_Width;
+    Y_Indent = Win_Height;
 
-    state_start_x = 2;
-    state_start_y = 1;
+    State_Start_X = 2;
+    State_Start_Y = 1;
 
-    state_end_x = win_width - 1;
-    state_end_y = win_height - 2;
+    State_End_X = Win_Width - 1;
+    State_End_Y = Win_Height - 2;
 
     pthread_t input_thread , play_thread , speed_thread , coord_thread;
     pthread_create(&input_thread , NULL , handle_input , NULL );
@@ -51,20 +51,20 @@ int main(){
 
     while(1){
         
-        render_state(board , stdscr , state_start_x , state_start_y , state_end_x , state_end_y);
+        render_state(Board , stdscr , State_Start_X , State_Start_Y , State_End_X , State_End_Y);
 
-        if(pause == false){
-            pthread_mutex_unlock(&speed_mutex);
-            if(speed == 1){
+        if(Pause == false){
+            pthread_mutex_unlock(&Speed_Mutex);
+            if(Speed == 1){
                 spec.tv_sec = 1;
                 spec.tv_nsec = 0;
             }else{
                 spec.tv_sec = 0;
-                spec.tv_nsec = nano_per_sec / speed;
+                spec.tv_nsec = nano_per_sec / Speed;
             }
-            pthread_mutex_unlock(&speed_mutex);
+            pthread_mutex_unlock(&Speed_Mutex);
 
-            update_board_state(board);
+            update_board_state(Board);
             nanosleep(&spec , NULL);
         }
     }
@@ -72,5 +72,5 @@ int main(){
     endwin();
 
 
-    destroy_board_state(board);
+    destroy_board_state(Board);
 }

@@ -204,11 +204,11 @@ bool mut_initiated = false;
 
 void lock_state(){
     if(mut_initiated == false){
-        pthread_mutex_init(&board_state_mutex , NULL);
+        pthread_mutex_init(&Board_State_Mutex , NULL);
         mut_initiated = true;
     }
 
-    pthread_mutex_lock(&board_state_mutex);
+    pthread_mutex_lock(&Board_State_Mutex);
 }
 
 void unlock_state(){
@@ -216,5 +216,5 @@ void unlock_state(){
         return;
     }
 
-    pthread_mutex_unlock(&board_state_mutex);
+    pthread_mutex_unlock(&Board_State_Mutex);
 }

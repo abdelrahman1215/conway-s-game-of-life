@@ -10,18 +10,18 @@ void *print_pause_play_state(void *){
         return NULL;
     }
 
-    bool last_pause_state = !pause;
+    bool last_pause_state = !Pause;
 
     while(1){
-        if(pause == last_pause_state){
+        if(Pause == last_pause_state){
             continue;
         }
 
-        pthread_mutex_lock(&print_mutex);
+        pthread_mutex_lock(&Print_Mutex);
 
-        move( 0 , (win_width - 8) / 2 - 1 );
+        move( 0 , (Win_Width - 8) / 2 - 1 );
 
-        if(pause == true){
+        if(Pause == true){
             printw("%c paused %c" , 196 , 196 );
         }else{
             printw(" playing ");
@@ -29,68 +29,68 @@ void *print_pause_play_state(void *){
 
         refresh();
 
-        pthread_mutex_unlock(&print_mutex);
+        pthread_mutex_unlock(&Print_Mutex);
 
-        last_pause_state = pause;
+        last_pause_state = Pause;
     }
 
     return NULL;
 }
 
 void render_exit_button(){
-    pthread_mutex_lock(&print_mutex);
+    pthread_mutex_lock(&Print_Mutex);
 
-    exit_start_x = 2;
-    exit_end_x = exit_start_x + 4;
-    exit_y = win_height - 1;
+    Exit_Start_X = 2;
+    Exit_End_X = Exit_Start_X + 4;
+    Exit_Y = Win_Height - 1;
 
-    mvprintw(exit_y , exit_start_x , " exit ");
+    mvprintw(Exit_Y , Exit_Start_X , " exit ");
 
-    pthread_mutex_unlock(&print_mutex);
+    pthread_mutex_unlock(&Print_Mutex);
 }
 
 void render_play_pause_button(){
-    pthread_mutex_lock(&print_mutex);
+    pthread_mutex_lock(&Print_Mutex);
 
-    play_start_x = (win_width - 14) / 2;
-    play_end_x = play_start_x + 14;
-    play_y = win_height - 1;
+    Play_Start_X = (Win_Width - 14) / 2;
+    Play_End_X = Play_Start_X + 14;
+    Play_Y = Win_Height - 1;
 
-    mvprintw( play_y , play_start_x , " play / pause ");
+    mvprintw( Play_Y , Play_Start_X , " play / pause ");
 
-    pthread_mutex_unlock(&print_mutex);
+    pthread_mutex_unlock(&Print_Mutex);
 }
 
 void *print_speed(void *){
 
     while (1){
-        pthread_mutex_lock(&print_mutex);
+        pthread_mutex_lock(&Print_Mutex);
 
-        mvprintw( play_y , play_end_x + 4 , " %ix %c%c" , speed , 196 , 196 );
+        mvprintw( Play_Y , Play_End_X + 4 , " %ix %c%c" , Speed , 196 , 196 );
 
-        pthread_mutex_unlock(&print_mutex);
+        pthread_mutex_unlock(&Print_Mutex);
     }
     
 }
 
 void render_reset_button(){
-    reset_y = play_y;
-    reset_end_x = play_start_x - 4;
-    reset_start_x = reset_end_x - 7;
+    Reset_Y = Play_Y;
+    Reset_End_X = Play_Start_X - 4;
+    Reset_Start_X = Reset_End_X - 7;
 
-    pthread_mutex_lock(&print_mutex);
+    pthread_mutex_lock(&Print_Mutex);
 
-    mvprintw( reset_y , reset_start_x , " reset ");
+    mvprintw( Reset_Y , Reset_Start_X , " reset ");
 
-    pthread_mutex_unlock(&print_mutex);
+    pthread_mutex_unlock(&Print_Mutex);
 }
 
 void *display_coord(void *){
     while(1){
-        pthread_mutex_lock(&print_mutex);
+        pthread_mutex_lock(&Print_Mutex);
 
-        mvprintw( play_y , (win_width - 3) - 13 , "%c%c %i , %i %c%c" , 196 , 196 , x_indent , y_indent , 196 ,196 );
+        mvprintw( Play_Y , (Win_Width - 3) - 13 , "%c%c %i , %i %c%c" , 196 , 196 ,X_Indent , Y_Indent , 196 ,196 );
 
-        pthread_mutex_unlock(&print_mutex);
+        pthread_mutex_unlock(&Print_Mutex);
     }
 }

@@ -139,11 +139,11 @@ void render_state(board_state *state_ptr , WINDOW *target_win , unsigned start_x
     char row[row_width];
     row[row_width - 1] = '\000';
 
-    pthread_mutex_lock(&print_mutex);
+    pthread_mutex_lock(&Print_Mutex);
 
     for(unsigned i = 0 , cur_y = start_y ; i <= end_y - start_y && i < translation -> height && cur_y <= end_y ; i++ , cur_y ++){
         for(unsigned j = 0 ; j < translation -> width && (j * 2) < row_width - 1 ; j++){
-            row[j * 2] = translation -> content[i + y_indent][j + x_indent];
+            row[j * 2] = translation -> content[i + Y_Indent][j + X_Indent];
             if((j * 2) + 1 < row_width - 1){
                 row[(j * 2) + 1] = ' ';
             }
@@ -156,7 +156,7 @@ void render_state(board_state *state_ptr , WINDOW *target_win , unsigned start_x
     
     refresh();
 
-    pthread_mutex_unlock(&print_mutex);
+    pthread_mutex_unlock(&Print_Mutex);
 
     destroy_frame(translation);
 }

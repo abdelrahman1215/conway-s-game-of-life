@@ -7,30 +7,26 @@ void handle_mouse_input(){
     MEVENT event;
     if(nc_getmouse(&event) != OK) return ;
 
-    if(event.x >= play_start_x && event.x <= play_end_x && event.y == play_y){
-        if(pause == true){
-            pause = false;
-        }else{
-            pause = true;
-        }
-    } else if(event.x >= exit_start_x && event.x <= exit_end_x && event.y == exit_y){
+    if(event.x >= Play_Start_X && event.x <= Play_End_X && event.y == Play_Y){
 
+        Pause = !Pause;
+
+    }else if(event.x >= Exit_Start_X && event.x <= Exit_End_X && event.y == Exit_Y){
         exit(0);
-        
-    } else if(event.x >= state_start_x && event.y >= state_start_y && event.x <= state_end_x && event.y <= state_end_y){
+    }else if(event.x >= State_Start_X && event.y >= State_Start_Y && event.x <= State_End_X && event.y <= State_End_Y){
         lock_state();
 
         cell_state new_state = alive;
-        unsigned x = ((event.x - state_start_x) / 2) + x_indent , y = event.y - state_start_y + y_indent;
-        if(lookup_cell_state(board , x , y , false) == alive){
+        unsigned x = ((event.x - State_Start_X) / 2) + X_Indent , y = event.y - State_Start_Y + Y_Indent;
+        if(lookup_cell_state(Board , x , y , false) == alive){
             new_state = dead;
         }
 
-        set_cell(board , x , y , new_state);
+        set_cell(Board , x , y , new_state);
 
         unlock_state();
-    } else if(event.x >= reset_start_x && event.x <= reset_end_x && event.y == reset_y){
-        reset_board(board);
+    }else if(event.x >= Reset_Start_X && event.x <= Reset_End_X && event.y == Reset_Y){
+        reset_board(Board);
     }
 }
 
@@ -42,19 +38,15 @@ void handle_keyboard_input(int input){
             break;
 
         case ' ':
-            if(pause == true){
-                pause = false;
-            }else{
-                pause = true;
-            }
+            Pause = !Pause;
 
             break;
 
         case 'w':
         case 'W':
         case KEY_UP:
-            if(y_indent > 0){
-                y_indent --;
+            if(Y_Indent > 0){
+                Y_Indent --;
             }
 
             break;
@@ -62,8 +54,8 @@ void handle_keyboard_input(int input){
         case 's':
         case 'S':
         case KEY_DOWN:
-            if(y_indent < get_board_height(board) - state_end_y){
-                y_indent ++;
+            if(Y_Indent < get_board_height(Board) - State_End_Y){
+                Y_Indent ++;
             }
 
             break;
@@ -71,8 +63,8 @@ void handle_keyboard_input(int input){
         case 'a':
         case 'A':
         case KEY_LEFT:
-            if(x_indent > 0){
-                x_indent --;
+            if(X_Indent > 0){
+                X_Indent --;
             }
 
             break;
@@ -80,26 +72,26 @@ void handle_keyboard_input(int input){
         case 'd':
         case 'D':
         case KEY_RIGHT:
-            if(x_indent < get_board_width(board) - state_end_x){
-                x_indent ++;
+            if(X_Indent < get_board_width(Board) - State_End_X){
+                X_Indent ++;
             }
 
             break;
 
         case '.':
-            if(speed < speed_limit){
-                pthread_mutex_lock(&speed_mutex);
+            if(Speed < speed_limit){
+                pthread_mutex_lock(&Speed_Mutex);
 
-                speed ++;
+                Speed ++;
 
-                pthread_mutex_unlock(&speed_mutex);
+                pthread_mutex_unlock(&Speed_Mutex);
             }
 
             break;
 
         case ',':
-            if(speed > 1){
-                speed --;
+            if(Speed > 1){
+                Speed --;
             }
 
             break;

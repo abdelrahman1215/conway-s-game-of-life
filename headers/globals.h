@@ -7,19 +7,19 @@
 
 #define speed_limit 100
 
-#define global __attribute__((__common__))
+#define GLOBAL __attribute__((__common__))
 
-global unsigned speed;
-global board_state *board;
-global pthread_mutex_t board_state_mutex;
-global unsigned state_start_x , state_start_y , state_end_x , state_end_y;
-global unsigned exit_start_x , exit_end_x ,  exit_y ;
-global unsigned play_start_x , play_end_x ,  play_y ;
-global unsigned reset_start_x , reset_end_x ,  reset_y ;
-global bool pause;
-global unsigned x_indent , y_indent;
-global unsigned win_width , win_height;
-global pthread_mutex_t print_mutex;
-global pthread_mutex_t speed_mutex;
+GLOBAL unsigned Speed;
+GLOBAL board_state *Board;
+GLOBAL pthread_mutex_t Board_State_Mutex;
+GLOBAL unsigned State_Start_X , State_Start_Y , State_End_X , State_End_Y;
+GLOBAL unsigned Exit_Start_X , Exit_End_X ,  Exit_Y ;
+GLOBAL unsigned Play_Start_X , Play_End_X ,  Play_Y ;
+GLOBAL unsigned Reset_Start_X , Reset_End_X ,  Reset_Y ;
+GLOBAL bool Pause;
+GLOBAL unsigned X_Indent , Y_Indent;
+GLOBAL unsigned Win_Width , Win_Height;
+GLOBAL pthread_mutex_t Print_Mutex;
+GLOBAL pthread_mutex_t Speed_Mutex;
 
 #endif

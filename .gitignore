@@ -1,0 +1,6 @@
+.vscode/
+*.exe
+bin/
+test.*
+todo.txt
+c_datastructures

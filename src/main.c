@@ -5,7 +5,7 @@
 #include "../headers/globals.h"
 #include "../headers/input.h"
 
-#include <pdcurses/curses.h>
+#include <pdcurses.h>
 #include <assert.h>
 #include <time.h>
 

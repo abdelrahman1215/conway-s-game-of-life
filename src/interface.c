@@ -6,9 +6,7 @@
 #include <stddef.h>
 
 void *print_pause_play_state(void *){
-    if(stdscr == NULL){
-        return NULL;
-    }
+    if(stdscr == NULL) pthread_exit(NULL);
 
     bool last_pause_state = !Pause;
 
@@ -38,6 +36,8 @@ void *print_pause_play_state(void *){
 }
 
 void render_exit_button(){
+    if(stdscr == NULL) return;
+
     pthread_mutex_lock(&Print_Mutex);
 
     Exit_Start_X = 2;
@@ -50,6 +50,8 @@ void render_exit_button(){
 }
 
 void render_play_pause_button(){
+    if(stdscr == NULL) return;
+
     pthread_mutex_lock(&Print_Mutex);
 
     Play_Start_X = (Win_Width - 14) / 2;
@@ -59,9 +61,11 @@ void render_play_pause_button(){
     mvprintw( Play_Y , Play_Start_X , " play / pause ");
 
     pthread_mutex_unlock(&Print_Mutex);
+
 }
 
 void *print_speed(void *){
+    if(stdscr == NULL) pthread_exit(NULL);
 
     while (1){
         pthread_mutex_lock(&Print_Mutex);
@@ -71,9 +75,12 @@ void *print_speed(void *){
         pthread_mutex_unlock(&Print_Mutex);
     }
     
+    return NULL;
 }
 
 void render_reset_button(){
+    if(stdscr == NULL) return;
+
     Reset_Y = Play_Y;
     Reset_End_X = Play_Start_X - 4;
     Reset_Start_X = Reset_End_X - 7;
@@ -86,6 +93,8 @@ void render_reset_button(){
 }
 
 void *display_coord(void *){
+    if(stdscr == NULL) pthread_exit(NULL);
+
     while(1){
         pthread_mutex_lock(&Print_Mutex);
 
@@ -93,4 +102,6 @@ void *display_coord(void *){
 
         pthread_mutex_unlock(&Print_Mutex);
     }
+
+    return NULL;
 }

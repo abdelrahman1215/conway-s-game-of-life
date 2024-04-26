@@ -101,7 +101,7 @@ void handle_keyboard_input(int input){
 
 //the purpose of making the function of this type is to be used with pthreads
 void *handle_input(void *arg){
-    if(stdscr == NULL) return NULL;
+    if(stdscr == NULL) pthread_exit(NULL);
 
     keypad(stdscr , true);
     mousemask(BUTTON1_PRESSED | REPORT_MOUSE_POSITION , NULL);

@@ -1,4 +1,5 @@
 CC = gcc
+Linked_List_Path = c_datastructures/bin/
 
 main: objects deps
 	$(CC) -o conway src/main.c bin/board_state.o bin/process_state.o bin/render_state.o bin/interface.o bin/input.o -lpdcurses -L$(Linked_List_Path) -llinked_list

@@ -1,4 +1,3 @@
-Linked_List_Path = c_datastructures/bin/
 CC = gcc
 
 main: objects deps

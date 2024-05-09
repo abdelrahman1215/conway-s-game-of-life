@@ -40,14 +40,9 @@ int main(){
     State_End_X = Win_Width - 1;
     State_End_Y = Win_Height - 2;
 
-    pthread_t input_thread , play_thread , speed_thread , coord_thread;
+    pthread_t input_thread , interface_thread;
     pthread_create(&input_thread , NULL , handle_input , NULL );
-    pthread_create(&play_thread , NULL , print_pause_play_state , NULL );
-    pthread_create(&speed_thread , NULL , print_speed , NULL );
-    pthread_create(&coord_thread , NULL , display_coord , NULL );
-    render_exit_button();
-    render_play_pause_button();
-    render_reset_button();
+    pthread_create(&interface_thread , NULL , render_interface , NULL );
 
     while(1){
         

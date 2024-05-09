@@ -5,34 +5,37 @@
 #include <pthread.h>
 #include <stddef.h>
 
-void *print_pause_play_state(void *){
+void print_pause_play_state(){
     if(stdscr == NULL) pthread_exit(NULL);
 
-    bool last_pause_state = !Pause;
+    pthread_mutex_lock(&Print_Mutex);
 
-    while(1){
-        if(Pause == last_pause_state){
-            continue;
-        }
-
-        pthread_mutex_lock(&Print_Mutex);
-
-        move( 0 , (Win_Width - 8) / 2 - 1 );
-
-        if(Pause == true){
-            printw("%c paused %c" , 196 , 196 );
-        }else{
-            printw(" playing ");
-        }
-
-        refresh();
-
-        pthread_mutex_unlock(&Print_Mutex);
-
-        last_pause_state = Pause;
+    move( 0 , (Win_Width - 8) / 2 - 1 );
+    if(Pause == true){
+        printw("%c paused %c" , 196 , 196 );
+    }else{
+        printw(" playing ");
     }
+    refresh();
 
-    return NULL;
+    pthread_mutex_unlock(&Print_Mutex);
+}
+
+void display_coord(void ){
+    pthread_mutex_lock(&Print_Mutex);
+
+    mvprintw( 0 , 2 , " %i , %i %c%c%c%c" , X_Indent , Y_Indent , 196 , 196 , 196 , 196  );
+
+    pthread_mutex_unlock(&Print_Mutex);
+
+}
+
+void print_speed(){
+    pthread_mutex_lock(&Print_Mutex);
+
+    mvprintw( Play_Y , Play_End_X + 4 , " %ix %c%c" , Speed , 196 , 196 );
+
+    pthread_mutex_unlock(&Print_Mutex);   
 }
 
 void render_exit_button(){
@@ -64,23 +67,7 @@ void render_play_pause_button(){
 
 }
 
-void *print_speed(void *){
-    if(stdscr == NULL) pthread_exit(NULL);
-
-    while (1){
-        pthread_mutex_lock(&Print_Mutex);
-
-        mvprintw( Play_Y , Play_End_X + 4 , " %ix %c%c" , Speed , 196 , 196 );
-
-        pthread_mutex_unlock(&Print_Mutex);
-    }
-    
-    return NULL;
-}
-
 void render_reset_button(){
-    if(stdscr == NULL) return;
-
     Reset_Y = Play_Y;
     Reset_End_X = Play_Start_X - 4;
     Reset_Start_X = Reset_End_X - 7;
@@ -92,16 +79,18 @@ void render_reset_button(){
     pthread_mutex_unlock(&Print_Mutex);
 }
 
-void *display_coord(void *){
-    if(stdscr == NULL) pthread_exit(NULL);
-
-    while(1){
-        pthread_mutex_lock(&Print_Mutex);
-
-        mvprintw( 0 , 2 , " %i , %i %c%c%c%c" , X_Indent , Y_Indent , 196 , 196 , 196 , 196  );
-
-        pthread_mutex_unlock(&Print_Mutex);
+void *render_interface(void *){
+    if(stdscr == NULL){
+        pthread_exit(0);
     }
 
-    return NULL;
+    render_exit_button();
+    render_play_pause_button();
+    render_reset_button();
+
+    while(1){
+        display_coord();
+        print_speed();
+        print_pause_play_state();
+    }
 }

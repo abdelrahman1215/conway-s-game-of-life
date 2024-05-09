@@ -5,8 +5,9 @@
 
 void handle_mouse_input(){
     MEVENT event;
-    if(nc_getmouse(&event) != OK) return ;
 
+    if(nc_getmouse(&event) != OK) return ;
+    
     if(event.x >= Play_Start_X && event.x <= Play_End_X && event.y == Play_Y){
 
         Pause = !Pause;
@@ -110,7 +111,11 @@ void *handle_input(void *arg){
     int ch = 0;
 
     while(1){
+        pthread_mutex_lock(&IO_Mutex);
+
         ch = getch();
+
+        pthread_mutex_unlock(&IO_Mutex);
 
         if(ch == ERR){
             continue;

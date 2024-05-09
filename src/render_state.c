@@ -96,10 +96,6 @@ frame *translate_state(board_state *state_ptr){
     return ret;
 }
 
-i128 minimum(i128 val_1 , i128 val_2){
-    return val_1 < val_2 ? val_1 : val_2;
-}
-
 void render_state(board_state *state_ptr , WINDOW *target_win , unsigned start_x , unsigned start_y , unsigned end_x , unsigned end_y){
     if(stdscr == NULL){
         return;
@@ -134,12 +130,12 @@ void render_state(board_state *state_ptr , WINDOW *target_win , unsigned start_x
     }
 
 
-    unsigned row_width = minimum(win_width , end_x - start_x);
+    unsigned row_width = (end_x - start_x) > win_width ? win_width : (end_x - start_x);
     row_width += (row_width % 2 == 0);
     char row[row_width];
     row[row_width - 1] = '\000';
 
-    pthread_mutex_lock(&Print_Mutex);
+    pthread_mutex_lock(&IO_Mutex);
 
     for(unsigned i = 0 , cur_y = start_y ; i <= end_y - start_y && i < translation -> height && cur_y <= end_y ; i++ , cur_y ++){
         for(unsigned j = 0 ; j < translation -> width && (j * 2) < row_width - 1 ; j++){
@@ -156,7 +152,7 @@ void render_state(board_state *state_ptr , WINDOW *target_win , unsigned start_x
     
     refresh();
 
-    pthread_mutex_unlock(&Print_Mutex);
+    pthread_mutex_unlock(&IO_Mutex);
 
     destroy_frame(translation);
 }

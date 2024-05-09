@@ -11,7 +11,8 @@
 
 int main(){
 
-    pthread_mutex_init(&Print_Mutex , NULL);
+    pthread_mutex_init(&IO_Mutex , NULL);
+    pthread_mutex_init(&Speed_Mutex , NULL);
 
     const unsigned nano_per_sec = 1000000000;
     Speed = 2;
@@ -45,7 +46,6 @@ int main(){
     pthread_create(&interface_thread , NULL , render_interface , NULL );
 
     while(1){
-        
         render_state(Board , stdscr , State_Start_X , State_Start_Y , State_End_X , State_End_Y);
 
         if(Pause == false){

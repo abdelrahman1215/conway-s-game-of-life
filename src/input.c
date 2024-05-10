@@ -3,6 +3,13 @@
 #include <pdcurses.h>
 #include <pthread.h>
 
+void quit(){
+    keypad(stdscr , false);
+    endwin();
+    printf("\033[?1000h\n");
+    exit(0);
+}
+
 void handle_mouse_input(){
     MEVENT event;
 
@@ -13,7 +20,7 @@ void handle_mouse_input(){
         Pause = !Pause;
 
     }else if(event.x >= Exit_Start_X && event.x <= Exit_End_X && event.y == Exit_Y){
-        exit(0);
+        quit();
     }else if(event.x >= State_Start_X && event.y >= State_Start_Y && event.x <= State_End_X && event.y <= State_End_Y){
         lock_state();
 

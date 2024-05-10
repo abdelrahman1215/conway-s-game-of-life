@@ -8,11 +8,14 @@
 #include <ncursesw/curses.h>
 #include <assert.h>
 #include <time.h>
+#include <locale.h>
 
 int main(){
 
     pthread_mutex_init(&IO_Mutex , NULL);
     pthread_mutex_init(&Speed_Mutex , NULL);
+
+    setlocale(LC_ALL, "");
 
     const unsigned nano_per_sec = 1000000000;
     Speed = 2;
@@ -20,12 +23,13 @@ int main(){
 
     Pause = true;
 
+    printf("\033[?1003h\n");
+
     initscr();
     refresh();
     curs_set(0);
     nodelay(stdscr , true);
     noecho();
-    box(stdscr , 0 , 0);
 
     Win_Width = getmaxx(stdscr) ;
     Win_Height = getmaxy(stdscr);
@@ -35,10 +39,10 @@ int main(){
     X_Indent = Win_Width;
     Y_Indent = Win_Height;
 
-    State_Start_X = 2;
+    State_Start_X = 1;
     State_Start_Y = 1;
 
-    State_End_X = Win_Width - 1;
+    State_End_X = Win_Width;
     State_End_Y = Win_Height - 2;
 
     pthread_t input_thread , interface_thread;
@@ -65,6 +69,8 @@ int main(){
     }
 
     endwin();
+
+    printf("\033[?1000h\n");
 
 
     destroy_board_state(Board);

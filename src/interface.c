@@ -10,11 +10,11 @@ void print_pause_play_state(){
 
     pthread_mutex_lock(&IO_Mutex);
 
-    move( 0 , (Win_Width - 8) / 2 - 1 );
+    move( 0 , (Win_Width - 8) / 2 );
     if(Pause == true){
-        printw(" paused %c" , 196 );
+        printw("paused");
     }else{
-        printw(" playing ");
+        printw("playing");
     }
     refresh();
 
@@ -24,7 +24,8 @@ void print_pause_play_state(){
 void display_coord(void ){
     pthread_mutex_lock(&IO_Mutex);
 
-    mvprintw( 0 , 2 , " %i , %i %c%c%c%c" , X_Indent , Y_Indent , 196 , 196 , 196 , 196  );
+    mvprintw( 0 , 3 , "%i , %i" , X_Indent , Y_Indent);
+
 
     pthread_mutex_unlock(&IO_Mutex);
 
@@ -33,7 +34,7 @@ void display_coord(void ){
 void print_speed(){
     pthread_mutex_lock(&IO_Mutex);
 
-    mvprintw( Play_Y , Play_End_X + 4 , " %ix %c%c" , Speed , 196 , 196 );
+    mvprintw( Play_Y , Play_End_X + 5 , "%ix" , Speed);
 
     pthread_mutex_unlock(&IO_Mutex);   
 }
@@ -41,13 +42,13 @@ void print_speed(){
 void render_exit_button(){
     if(stdscr == NULL) return;
 
-    Exit_Start_X = 2;
-    Exit_End_X = Exit_Start_X + 4;
+    Exit_Start_X = 3;
+    Exit_End_X = Exit_Start_X + 5;
     Exit_Y = Win_Height - 1;
 
     pthread_mutex_lock(&IO_Mutex);
 
-    mvprintw(Exit_Y , Exit_Start_X , " exit ");
+    mvprintw(Exit_Y , Exit_Start_X , "exit");
 
     pthread_mutex_unlock(&IO_Mutex);
 }
@@ -61,7 +62,7 @@ void render_play_pause_button(){
 
     pthread_mutex_lock(&IO_Mutex);
 
-    mvprintw( Play_Y , Play_Start_X , " play / pause ");
+    mvprintw( Play_Y , Play_Start_X , "play / pause");
 
     pthread_mutex_unlock(&IO_Mutex);
 
@@ -69,12 +70,12 @@ void render_play_pause_button(){
 
 void render_reset_button(){
     Reset_Y = Play_Y;
-    Reset_End_X = Play_Start_X - 4;
+    Reset_End_X = Play_Start_X - 3;
     Reset_Start_X = Reset_End_X - 7;
 
     pthread_mutex_lock(&IO_Mutex);
 
-    mvprintw( Reset_Y , Reset_Start_X , " reset ");
+    mvprintw( Reset_Y , Reset_Start_X , "reset");
 
     pthread_mutex_unlock(&IO_Mutex);
 }

@@ -107,6 +107,7 @@ void *handle_input(void *arg){
     keypad(stdscr , true);
     mousemask(BUTTON1_PRESSED | REPORT_MOUSE_POSITION , NULL);
     mouseinterval(0);
+    nodelay(stdscr , true);
     noecho();
     int ch = 0;
 

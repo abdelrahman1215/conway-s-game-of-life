@@ -7,11 +7,25 @@ game controls:
 * , and . -> decrease and increase speed
 * reset button -> reset the board
 
-how to build the project :
-* before building the project make sure to install pdcurses and pthreads (if you are on windows) 
-* [pdcurses](https://sourceforge.net/projects/pdcurses/)
+cloning :
 
-* then you just have to edit the CC variable in the makefile of the project and the c_datastructures submodule into what ever compiler you use
+* for windows :
+```
+git clone --recursive https://github.com/abdelrahman1215/conway-s-game-of-life.git
+```
+
+* for linux
+```
+git clone --recursive -d ncursesw https://github.com/abdelrahman1215/conway-s-game-of-life.git
+```
+
+building :
+
+* before building install
+    * for windows [pdcurses](https://sourceforge.net/projects/pdcurses/) and [pthreads](https://sourceforge.net/projects/pthreads4w/)
+    * for linux ncurses and ncursesw
+
+* then edit the CC variable in the makefile of the project and the c_datastructures submodule into what ever compiler you use
 
 * then just:
 ```

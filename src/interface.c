@@ -12,7 +12,7 @@ void print_pause_play_state(){
 
     move( 0 , (Win_Width - 8) / 2 );
     if(Pause == true){
-        printw("paused");
+        printw("paused ");
     }else{
         printw("playing");
     }
@@ -24,7 +24,7 @@ void print_pause_play_state(){
 void display_coord(void ){
     pthread_mutex_lock(&IO_Mutex);
 
-    mvprintw( 0 , 3 , "%i , %i" , X_Indent , Y_Indent);
+    mvprintw( 0 , 3 , "%i , %i     " , X_Indent , Y_Indent);
 
 
     pthread_mutex_unlock(&IO_Mutex);
@@ -34,7 +34,7 @@ void display_coord(void ){
 void print_speed(){
     pthread_mutex_lock(&IO_Mutex);
 
-    mvprintw( Play_Y , Play_End_X + 5 , "%ix" , Speed);
+    mvprintw( Play_Y , Play_End_X + 5 , "%ix  " , Speed);
 
     pthread_mutex_unlock(&IO_Mutex);   
 }

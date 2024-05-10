@@ -8,14 +8,11 @@
 #include <ncursesw/curses.h>
 #include <assert.h>
 #include <time.h>
-#include <locale.h>
 
 int main(){
 
     pthread_mutex_init(&IO_Mutex , NULL);
     pthread_mutex_init(&Speed_Mutex , NULL);
-
-    setlocale(LC_ALL, "");
 
     const unsigned nano_per_sec = 1000000000;
     Speed = 2;
@@ -23,7 +20,7 @@ int main(){
 
     Pause = true;
 
-    printf("\033[?1003h\n");
+    printf("\033[?1000h\n");
 
     initscr();
     refresh();
@@ -70,7 +67,7 @@ int main(){
 
     endwin();
 
-    printf("\033[?1000h\n");
+    printf("\033[?1003h\n");
 
 
     destroy_board_state(Board);

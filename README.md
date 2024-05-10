@@ -16,7 +16,7 @@ git clone --recursive https://github.com/abdelrahman1215/conway-s-game-of-life.g
 
 * for linux
 ```
-git clone --recursive -d ncursesw https://github.com/abdelrahman1215/conway-s-game-of-life.git
+git clone --recursive -b ncursesw https://github.com/abdelrahman1215/conway-s-game-of-life.git
 ```
 
 building :

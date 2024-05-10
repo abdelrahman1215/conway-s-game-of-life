@@ -11,8 +11,8 @@ struct frame {
     char **content;
 };
 
-#define empty_cell (char) 250 // ·
-#define alive_cell (char) 254 // ■ 
+#define empty_cell (char) '.' // 250 // ·
+#define alive_cell (char) '#' // 254 // ■ 
 
 frame *new_frame(unsigned width , unsigned height){
     //used <= 0 instead of == 0 although it is unsigned to silence a clang-tidy warning

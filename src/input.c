@@ -1,12 +1,12 @@
 #include "../headers/globals.h"
 #include "../headers/board_state.h"
-#include <pdcurses.h>
+#include <ncursesw/curses.h>
 #include <pthread.h>
 
 void handle_mouse_input(){
     MEVENT event;
 
-    if(nc_getmouse(&event) != OK) return ;
+    if(getmouse(&event) != OK) return ;
     
     if(event.x >= Play_Start_X && event.x <= Play_End_X && event.y == Play_Y){
 

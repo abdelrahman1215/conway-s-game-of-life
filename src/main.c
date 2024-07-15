@@ -9,23 +9,59 @@
 #include <assert.h>
 #include <time.h>
 
-int main(){
 
+
+void *render(void *){
+    Speed = 2;
+    const int nano_per_sec = 1000000000;
+    struct timespec spec = {.tv_nsec =  nano_per_sec / Speed, .tv_sec = 0};
+
+    while(1){
+        render_state(Board , stdscr , State_Start_X , State_Start_Y , State_End_X , State_End_Y);
+
+        if(Pause == false){
+            pthread_mutex_lock(&Speed_Mutex);
+            if(Speed == 1){
+                spec.tv_sec = 1;
+                spec.tv_nsec = 0;
+            }else{
+                spec.tv_sec = 0;
+                spec.tv_nsec = nano_per_sec / Speed;
+            }
+            pthread_mutex_unlock(&Speed_Mutex);
+
+            update_board_state(Board);
+            
+            nanosleep(&spec , NULL);
+        }
+
+    }
+}
+
+int main(){
     pthread_mutex_init(&IO_Mutex , NULL);
     pthread_mutex_init(&Speed_Mutex , NULL);
 
-    const unsigned nano_per_sec = 1000000000;
-    Speed = 2;
-    struct timespec spec = {.tv_nsec =  nano_per_sec / Speed, .tv_sec = 0};
-
     Pause = true;
 
+    printf("\033[?1003h\n");
+
     initscr();
+
+
+    start_color();
+    keypad(stdscr , true);
+    mousemask(BUTTON1_PRESSED | REPORT_MOUSE_POSITION , NULL);
+    mouseinterval(0);
+    noecho();
+    //cbreak();
     refresh();
     curs_set(0);
     nodelay(stdscr , true);
-    noecho();
+
+    attron(COLOR_PAIR(box_index));
     box(stdscr , 0 , 0);
+    attron(COLOR_PAIR(box_index));
 
     Win_Width = getmaxx(stdscr) ;
     Win_Height = getmaxy(stdscr);
@@ -41,27 +77,15 @@ int main(){
     State_End_X = Win_Width - 1;
     State_End_Y = Win_Height - 2;
 
-    pthread_t input_thread , interface_thread;
-    pthread_create(&input_thread , NULL , handle_input , NULL );
+    init_pair(button_index , COLOR_CYAN , COLOR_BLACK);
+    init_pair(box_index , COLOR_BLUE , COLOR_BLACK);
+
+    pthread_t interface_thread , render_tread;
+    pthread_create(&render_tread , NULL , render , NULL );
     pthread_create(&interface_thread , NULL , render_interface , NULL );
 
     while(1){
-        render_state(Board , stdscr , State_Start_X , State_Start_Y , State_End_X , State_End_Y);
-
-        if(Pause == false){
-            pthread_mutex_unlock(&Speed_Mutex);
-            if(Speed == 1){
-                spec.tv_sec = 1;
-                spec.tv_nsec = 0;
-            }else{
-                spec.tv_sec = 0;
-                spec.tv_nsec = nano_per_sec / Speed;
-            }
-            pthread_mutex_unlock(&Speed_Mutex);
-
-            update_board_state(Board);
-            nanosleep(&spec , NULL);
-        }
+        handle_input(NULL);
     }
 
     endwin();

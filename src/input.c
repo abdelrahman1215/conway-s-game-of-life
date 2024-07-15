@@ -6,7 +6,7 @@
 void quit(){
     keypad(stdscr , false);
     endwin();
-    printf("\033[?1000h\n");
+    printf("\033[?1003l\n");
     exit(0);
 }
 
@@ -14,24 +14,20 @@ void handle_mouse_input(){
     MEVENT event;
 
     if(nc_getmouse(&event) != OK) return ;
-    
+
+
     if(event.x >= Play_Start_X && event.x <= Play_End_X && event.y == Play_Y){
-
         Pause = !Pause;
-
     }else if(event.x >= Exit_Start_X && event.x <= Exit_End_X && event.y == Exit_Y){
         quit();
     }else if(event.x >= State_Start_X && event.y >= State_Start_Y && event.x <= State_End_X && event.y <= State_End_Y){
         lock_state();
-
         cell_state new_state = alive;
         unsigned x = ((event.x - State_Start_X) / 2) + X_Indent , y = event.y - State_Start_Y + Y_Indent;
         if(lookup_cell_state(Board , x , y , false) == alive){
             new_state = dead;
         }
-
         set_cell(Board , x , y , new_state);
-
         unlock_state();
     }else if(event.x >= Reset_Start_X && event.x <= Reset_End_X && event.y == Reset_Y){
         reset_board(Board);
@@ -109,33 +105,23 @@ void handle_keyboard_input(int input){
 
 //the purpose of making the function of this type is to be used with pthreads
 void *handle_input(void *arg){
-    if(stdscr == NULL) pthread_exit(NULL);
+    if(stdscr == NULL) return NULL;
 
-    keypad(stdscr , true);
-    mousemask(BUTTON1_PRESSED | REPORT_MOUSE_POSITION , NULL);
-    mouseinterval(0);
-    noecho();
     int ch = 0;
 
-    while(1){
-        pthread_mutex_lock(&IO_Mutex);
+    ch = getch();
 
-        ch = getch();
+    if(ch == ERR){
+        return NULL;
+    }
 
-        pthread_mutex_unlock(&IO_Mutex);
+    if(ch == KEY_MOUSE){
+        handle_mouse_input();
+    }else{
+        handle_keyboard_input(ch);
+    }
 
-        if(ch == ERR){
-            continue;
-        }
-
-        if(ch == KEY_MOUSE){
-            handle_mouse_input();
-        }else{
-            handle_keyboard_input(ch);
-        }
-
-        flushinp();
-    };
+    flushinp();
 
     return NULL;
 }

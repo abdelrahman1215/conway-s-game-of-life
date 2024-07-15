@@ -135,7 +135,6 @@ void render_state(board_state *state_ptr , WINDOW *target_win , unsigned start_x
     char row[row_width];
     row[row_width - 1] = '\000';
 
-    pthread_mutex_lock(&IO_Mutex);
 
     for(unsigned i = 0 , cur_y = start_y ; i <= end_y - start_y && i < translation -> height && cur_y <= end_y ; i++ , cur_y ++){
         for(unsigned j = 0 ; j < translation -> width && (j * 2) < row_width - 1 ; j++){
@@ -145,14 +144,15 @@ void render_state(board_state *state_ptr , WINDOW *target_win , unsigned start_x
             }
         }
 
+        pthread_mutex_lock(&IO_Mutex);
 
         mvwprintw(target_win , cur_y , start_x , "%s" , row);
-
+        
+        pthread_mutex_unlock(&IO_Mutex);
     }
     
     refresh();
 
-    pthread_mutex_unlock(&IO_Mutex);
 
     destroy_frame(translation);
 }

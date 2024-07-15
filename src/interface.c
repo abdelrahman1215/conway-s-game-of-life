@@ -12,9 +12,17 @@ void print_pause_play_state(){
 
     move( 0 , (Win_Width - 8) / 2 - 1 );
     if(Pause == true){
-        printw(" paused %c" , 196 );
+        attron(COLOR_PAIR(button_index));
+        printw(" paused ");
+        attroff(COLOR_PAIR(button_index));
+        
+        attron(COLOR_PAIR(2));
+        printw("%c" , 196 );
+        attroff(COLOR_PAIR(2));
     }else{
+        attron(COLOR_PAIR(button_index));
         printw(" playing ");
+        attroff(COLOR_PAIR(button_index));
     }
     refresh();
 
@@ -24,7 +32,13 @@ void print_pause_play_state(){
 void display_coord(void ){
     pthread_mutex_lock(&IO_Mutex);
 
-    mvprintw( 0 , 2 , " %i , %i %c%c%c%c" , X_Indent , Y_Indent , 196 , 196 , 196 , 196  );
+    attron(COLOR_PAIR(button_index));
+    mvprintw( 0 , 2 , " %i , %i " , X_Indent , Y_Indent );
+    attroff(COLOR_PAIR(button_index));
+
+    attron(COLOR_PAIR(2));
+    printw("%c%c%c%c" , 196 , 196 , 196 , 196 );
+    attroff(COLOR_PAIR(2));
 
     pthread_mutex_unlock(&IO_Mutex);
 
@@ -33,7 +47,13 @@ void display_coord(void ){
 void print_speed(){
     pthread_mutex_lock(&IO_Mutex);
 
-    mvprintw( Play_Y , Play_End_X + 4 , " %ix %c%c" , Speed , 196 , 196 );
+    attron(COLOR_PAIR(button_index));
+    mvprintw( Play_Y , Play_End_X + 4 , " %ix " , Speed);
+    attroff(COLOR_PAIR(button_index));
+
+    attron(COLOR_PAIR(2));
+    printw("%c%c" , 196 , 196 );
+    attroff(COLOR_PAIR(2));
 
     pthread_mutex_unlock(&IO_Mutex);   
 }
@@ -47,7 +67,9 @@ void render_exit_button(){
 
     pthread_mutex_lock(&IO_Mutex);
 
+    attron(COLOR_PAIR(button_index));
     mvprintw(Exit_Y , Exit_Start_X , " exit ");
+    attroff(COLOR_PAIR(button_index));
 
     pthread_mutex_unlock(&IO_Mutex);
 }
@@ -61,7 +83,9 @@ void render_play_pause_button(){
 
     pthread_mutex_lock(&IO_Mutex);
 
+    attron(COLOR_PAIR(button_index));
     mvprintw( Play_Y , Play_Start_X , " play / pause ");
+    attroff(COLOR_PAIR(button_index));
 
     pthread_mutex_unlock(&IO_Mutex);
 
@@ -74,7 +98,9 @@ void render_reset_button(){
 
     pthread_mutex_lock(&IO_Mutex);
 
+    attron(COLOR_PAIR(button_index));
     mvprintw( Reset_Y , Reset_Start_X , " reset ");
+    attroff(COLOR_PAIR(button_index));
 
     pthread_mutex_unlock(&IO_Mutex);
 }
@@ -84,13 +110,34 @@ void *render_interface(void *){
         pthread_exit(0);
     }
 
-    render_exit_button();
-    render_play_pause_button();
-    render_reset_button();
+    static int called = false;
+    static unsigned int last_diplayed_speed = 0;
+    static coord last_diplayed_coord = {.x = 0 , .y = 0};
+
+    if(called == false ){
+        render_exit_button();
+        render_play_pause_button();
+        render_reset_button();
+    }
+
 
     while(1){
-        display_coord();
-        print_speed();
+        if(last_diplayed_speed != Speed){
+            print_speed();
+        }
+
+        if(last_diplayed_coord.x != X_Indent || last_diplayed_coord.y != Y_Indent){
+            display_coord();
+        }
+        
         print_pause_play_state();
     }
+
+
+    called = true;
+    last_diplayed_speed = Speed;
+    last_diplayed_coord.x = X_Indent;
+    last_diplayed_coord.y = Y_Indent;
+
+    return NULL;
 }

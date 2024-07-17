@@ -1,5 +1,6 @@
 #include "../headers/globals.h"
 #include "../headers/board_state.h"
+#include "../headers/interface.h"
 #include <pdcurses.h>
 #include <pthread.h>
 
@@ -10,11 +11,29 @@ void quit(){
     exit(0);
 }
 
-void handle_mouse_input(){
+void handle_mouse_input(int ch){
     MEVENT event;
 
     if(nc_getmouse(&event) != OK) return ;
 
+    //if(event.x >= Play_Start_X && event.x <= Play_End_X && event.y == Play_Y){
+    //    Pause = !Pause;
+    //}else if(event.x >= Exit_Start_X && event.x <= Exit_End_X && event.y == Exit_Y){
+    //    quit();
+    //}else if(event.x >= State_Start_X && event.y >= State_Start_Y && event.x <= State_End_X && event.y <= State_End_Y){
+    //    lock_state();
+    //    cell_state new_state = alive;
+    //    unsigned x = ((event.x - State_Start_X) / 2) + X_Indent , y = event.y - State_Start_Y + Y_Indent;
+    //    if(lookup_cell_state(Board , x , y , false) == alive){
+    //        new_state = dead;
+    //    }
+    //    set_cell(Board , x , y , new_state);
+    //    unlock_state();
+    //}else if(event.x >= Reset_Start_X && event.x <= Reset_End_X && event.y == Reset_Y){
+    //    reset_board(Board);
+    //}
+
+    if(ch != KEY_MOUSE) return ;
 
     if(event.x >= Play_Start_X && event.x <= Play_End_X && event.y == Play_Y){
         Pause = !Pause;
@@ -111,15 +130,16 @@ void *handle_input(void *arg){
 
     ch = getch();
 
+    handle_mouse_input(ch);
+    
     if(ch == ERR){
         return NULL;
     }
 
-    if(ch == KEY_MOUSE){
-        handle_mouse_input();
-    }else{
+    if(ch != KEY_MOUSE){
         handle_keyboard_input(ch);
-    }
+    }//else{
+    //}
 
     flushinp();
 

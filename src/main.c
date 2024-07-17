@@ -51,7 +51,7 @@ int main(){
 
     start_color();
     keypad(stdscr , true);
-    mousemask(BUTTON1_PRESSED | REPORT_MOUSE_POSITION , NULL);
+    mousemask(BUTTON1_PRESSED | BUTTON1_CLICKED | BUTTON1_DOUBLE_CLICKED | REPORT_MOUSE_POSITION , NULL);
     mouseinterval(0);
     noecho();
     //cbreak();
@@ -80,8 +80,8 @@ int main(){
     init_pair(button_index , COLOR_CYAN , COLOR_BLACK);
     init_pair(box_index , COLOR_BLUE , COLOR_BLACK);
 
-    pthread_t interface_thread , render_tread;
-    pthread_create(&render_tread , NULL , render , NULL );
+    pthread_t interface_thread , render_thread;
+    pthread_create(&render_thread , NULL , render , NULL );
     pthread_create(&interface_thread , NULL , render_interface , NULL );
 
     while(1){

@@ -2,6 +2,7 @@
 #include "../headers/board_state.h"
 #include "../headers/process_state.h"
 #include "../c_datastructures/headers/linked_list.h"
+#include "../c_datastructures/headers/dynamic_array.h"
 #include <stddef.h>
 
 i64 alive_neighbors(board_state *state_ptr , i64 x , i64 y){
@@ -11,47 +12,19 @@ i64 alive_neighbors(board_state *state_ptr , i64 x , i64 y){
     bool log_lookup = lookup_cell_state(state_ptr , x , y , false) == alive;
     unsigned state_width = get_board_width(state_ptr) , state_height = get_board_height(state_ptr);
 
-    for(i64 i , j , iter = 0 ; iter < 8 ; iter++){
-        switch(iter){
-            case 0 :
-                i = x;
-                j = y - 1;
-                break;
-            case 1 :
-                i = x + 1;
-                j = y - 1;
-                break;
-            case 2 :
-                i = x + 1;
-                j = y;
-                break;
-            case 3 :
-                i = x + 1;
-                j = y + 1;
-                break;
-            case 4 :
-                i = x;
-                j = y + 1;
-                break;
-            case 5 :
-                i = x - 1;
-                j = y + 1;
-                break;
-            case 6 :
-                i = x - 1;
-                j = y;
-                break;
-            case 7 :
-                i = x - 1;
-                j = y - 1;
-                break;
-        }
-
-        if(i < 0 || i >= state_width || j < 0 || j >= state_height){
+    for(u128 i = x - 1 ; i <= x + 1 ; i++ ){
+        if(i < 0 || i >= state_width){
             continue;
         }
 
-        ret += lookup_cell_state(state_ptr , i , j , log_lookup);
+        for(u128 j = y - 1 ; j <= y + 1 ; j++){
+            if(j < 0 || j >= state_height ||(i == x && j == y)){
+                continue;
+            }
+
+            ret += lookup_cell_state(state_ptr , i , j , log_lookup);
+        }
+
         
     }
 
@@ -64,7 +37,8 @@ typedef struct set_target{
 } set_target;
 
 void update_board_state(board_state *state_ptr){
-    linked_list *set_list = new_linked_list();
+    //linked_list *set_list = new_linked_list();
+    dynamic_array *set_list = new_dynamic_array(sizeof(set_target) , NULL);
     coord *position;
     unsigned char alive_cells = 0;
 
@@ -76,7 +50,7 @@ void update_board_state(board_state *state_ptr){
 
     linked_list *check_list = get_check_list(state_ptr);
 
-    for(node *nd = linked_list_get_first_node(check_list) ; nd != NULL ; nd = linked_list_get_next_node(nd) , i++){
+    for(node *nd = linked_list_get_first_node(check_list) ; nd != NULL ; nd = linked_list_get_next_node(nd)){
         position  = (coord *)linked_list_get_obj_ptr(nd);
         alive_cells = alive_neighbors(state_ptr , position -> x , position -> y);
         state = lookup_cell_state(state_ptr , position -> x , position -> y , false);
@@ -98,20 +72,20 @@ void update_board_state(board_state *state_ptr){
             
         }
 
-        linked_list_add_node(&set , sizeof(set_target) , NULL , set_list);
+        dynamic_array_add_element(set_list , &set);
     }
 
     reset_board(state_ptr);
     
     set_target *set_ptr = NULL;
-    for(node *nd = linked_list_get_first_node(set_list) ; nd != NULL ; nd = linked_list_get_next_node(nd)){
+    u64 max = dynamic_array_get_elements_no(set_list);
+    for(u64 i  = 0 ; i < max  ; i++){
 
-        set_ptr = linked_list_get_obj_ptr(nd);
+        set_ptr = (set_target *)dynamic_array_get_element(set_list , i);
         set_cell(state_ptr , set_ptr -> x , set_ptr -> y , set_ptr -> new_state);
-
     }
 
     unlock_state();
 
-    destroy_linked_list(set_list);
+    destroy_dynamic_array(set_list);
 }

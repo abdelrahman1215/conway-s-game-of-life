@@ -9,8 +9,7 @@ typedef struct coord{
     unsigned x , y;
 }coord;
 
-typedef enum cell_state{dead = 0 , alive = 1} cell_state;
-#define state_err -1
+typedef enum cell_state{err = -1 , dead = 0 , alive = 1} cell_state;
 
 board_state *new_board_state(unsigned height , unsigned width);
 void destroy_board_state(board_state *state_ptr);

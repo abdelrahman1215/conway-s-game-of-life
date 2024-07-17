@@ -99,8 +99,8 @@ void set_cell(board_state *state_ptr , unsigned x , unsigned y , cell_state new_
 }
 
 cell_state lookup_cell_state(board_state *state_ptr , unsigned x , unsigned y , bool log_lookup){
-    if(state_ptr == NULL) return state_err;
-    if(x >= state_ptr -> width || y >= state_ptr -> height) return state_err;
+    if(state_ptr == NULL) return err;
+    if(x >= state_ptr -> width || y >= state_ptr -> height) return err;
 
     cell *target = state_ptr -> cells[y] + x;
 

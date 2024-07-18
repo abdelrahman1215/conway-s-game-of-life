@@ -32,7 +32,10 @@ void *render_board(void *){
             
             nanosleep(&spec , NULL);
             
-            update_board_state(Board);
+            //checks if the the game is still playing after the sleeping period
+            if(Pause == false){
+                update_board_state(Board);
+            }
         }
 
         spec.tv_nsec = nano_per_sec / 100;

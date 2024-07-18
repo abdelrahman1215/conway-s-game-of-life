@@ -84,6 +84,9 @@ void handle_keyboard_input(int input){
                 Y_Indent --;
             }
 
+            render_state(Board , stdscr , State_Start_X , State_Start_Y , State_End_X , State_End_Y);
+            refresh();
+
             break;
         
         case 's':
@@ -92,6 +95,9 @@ void handle_keyboard_input(int input){
             if(Y_Indent < get_board_height(Board) - State_End_Y){
                 Y_Indent ++;
             }
+
+            render_state(Board , stdscr , State_Start_X , State_Start_Y , State_End_X , State_End_Y);
+            refresh();
 
             break;
 
@@ -102,6 +108,9 @@ void handle_keyboard_input(int input){
                 X_Indent --;
             }
 
+            render_state(Board , stdscr , State_Start_X , State_Start_Y , State_End_X , State_End_Y);
+            refresh();
+
             break;
 
         case 'd':
@@ -110,6 +119,9 @@ void handle_keyboard_input(int input){
             if(X_Indent < get_board_width(Board) - State_End_X){
                 X_Indent ++;
             }
+
+            render_state(Board , stdscr , State_Start_X , State_Start_Y , State_End_X , State_End_Y);
+            refresh();
 
             break;
 

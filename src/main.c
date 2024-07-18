@@ -72,10 +72,10 @@ int main(){
     Win_Width = getmaxx(stdscr) ;
     Win_Height = getmaxy(stdscr);
 
-    Board = new_board_state(Win_Height * 3 , Win_Width * 3);
+    Board = new_board_state(300 , 400);
 
-    X_Indent = Win_Width;
-    Y_Indent = Win_Height;
+    X_Indent = 0;
+    Y_Indent = 0;
 
     State_Start_X = 2;
     State_Start_Y = 1;

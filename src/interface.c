@@ -150,7 +150,7 @@ void *render_interface(void *){
 
     static int called = false;
     static unsigned int last_diplayed_speed = 0;
-    static coord last_diplayed_coord = {.x = 0 , .y = 0};
+    static coord last_diplayed_coord = {.x = -1 , .y = -1};
 
     if(called == false ){
         render_exit_button();

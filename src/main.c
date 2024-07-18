@@ -53,7 +53,6 @@ int main(){
 
     initscr();
 
-
     start_color();
     keypad(stdscr , true);
     mousemask(BUTTON1_PRESSED | BUTTON1_CLICKED | BUTTON1_DOUBLE_CLICKED | REPORT_MOUSE_POSITION , NULL);

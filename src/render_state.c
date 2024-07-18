@@ -108,7 +108,7 @@ void unhighlight_cells(){
 }
 
 void highlight_exec(){
-    if(high_cell_x > -1 && high_cell_y > -1){
+    if(high_cell_x > -1 && high_cell_y > -1 && (high_cell_x + 1) * 2 < Win_Width - 2){
         frame *translation = translate_state(Board);
 
         attron(COLOR_PAIR(cell_highlight_index));

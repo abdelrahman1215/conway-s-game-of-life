@@ -159,17 +159,15 @@ void *render_interface(void *){
     }
 
 
-    while(1){
-        if(last_diplayed_speed != Speed){
-            print_speed();
-        }
-
-        if(last_diplayed_coord.x != X_Indent || last_diplayed_coord.y != Y_Indent){
-            display_coord();
-        }
-        
-        print_pause_play_state();
+    if(last_diplayed_speed != Speed){
+        print_speed();
     }
+
+    if(last_diplayed_coord.x != X_Indent || last_diplayed_coord.y != Y_Indent){
+        display_coord();
+    }
+        
+    print_pause_play_state();
 
 
     called = true;

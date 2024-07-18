@@ -85,12 +85,12 @@ int main(){
     init_pair(button_highlight_index , COLOR_BLACK , COLOR_BLUE);
     init_pair(cell_highlight_index , COLOR_BLACK , COLOR_WHITE);
 
-    pthread_t interface_thread , render_thread;
+    pthread_t render_thread;
     pthread_create(&render_thread , NULL , render_board , NULL );
-    pthread_create(&interface_thread , NULL , render_interface , NULL );
 
     while(1){
         handle_input(NULL);
+        render_interface(NULL);
     }
 
     endwin();

@@ -1,6 +1,7 @@
 #include "../headers/globals.h"
-#include "../headers/board_state.h"
 #include "../headers/interface.h"
+#include "../headers/board_state.h"
+#include "../headers/render_state.h"
 #include <pdcurses.h>
 #include <pthread.h>
 
@@ -13,25 +14,33 @@ void quit(){
 
 void handle_mouse_input(int ch){
     MEVENT event;
+    static int Last_X = -1 , Last_Y = -1;
 
     if(nc_getmouse(&event) != OK) return ;
 
-    //if(event.x >= Play_Start_X && event.x <= Play_End_X && event.y == Play_Y){
-    //    Pause = !Pause;
-    //}else if(event.x >= Exit_Start_X && event.x <= Exit_End_X && event.y == Exit_Y){
-    //    quit();
-    //}else if(event.x >= State_Start_X && event.y >= State_Start_Y && event.x <= State_End_X && event.y <= State_End_Y){
-    //    lock_state();
-    //    cell_state new_state = alive;
-    //    unsigned x = ((event.x - State_Start_X) / 2) + X_Indent , y = event.y - State_Start_Y + Y_Indent;
-    //    if(lookup_cell_state(Board , x , y , false) == alive){
-    //        new_state = dead;
-    //    }
-    //    set_cell(Board , x , y , new_state);
-    //    unlock_state();
-    //}else if(event.x >= Reset_Start_X && event.x <= Reset_End_X && event.y == Reset_Y){
-    //    reset_board(Board);
-    //}
+    if(event.x != Last_X || event.y != Last_Y){
+        render_exit_button();
+        render_play_pause_button();
+        render_reset_button();
+        unhighlight_cells();
+
+        if(event.x >= Play_Start_X && event.x <= Play_End_X && event.y == Play_Y){
+            highlight_play_pause_button();
+        }else if(event.x >= Exit_Start_X && event.x <= Exit_End_X && event.y == Exit_Y){
+            highlight_exit_button();
+        }else if(event.x >= State_Start_X && event.y >= State_Start_Y && event.x <= State_End_X && event.y <= State_End_Y ){
+            unsigned x = (event.x - State_Start_X) / 2 , y = event.y - State_Start_Y;
+            highlight_cell(x , y);
+
+            render_state(Board , stdscr , State_Start_X , State_Start_Y , State_End_X , State_End_Y);
+            refresh();
+        }else if(event.x >= Reset_Start_X && event.x <= Reset_End_X && event.y == Reset_Y){
+            highlight_reset_button();
+        }
+    }
+
+    Last_X = event.x;
+    Last_Y = event.y;
 
     if(ch != KEY_MOUSE) return ;
 
@@ -39,7 +48,7 @@ void handle_mouse_input(int ch){
         Pause = !Pause;
     }else if(event.x >= Exit_Start_X && event.x <= Exit_End_X && event.y == Exit_Y){
         quit();
-    }else if(event.x >= State_Start_X && event.y >= State_Start_Y && event.x <= State_End_X && event.y <= State_End_Y){
+    }else if(event.x >= State_Start_X && event.y >= State_Start_Y && event.x <= State_End_X && event.y <= State_End_Y ){
         lock_state();
         cell_state new_state = alive;
         unsigned x = ((event.x - State_Start_X) / 2) + X_Indent , y = event.y - State_Start_Y + Y_Indent;
@@ -48,6 +57,9 @@ void handle_mouse_input(int ch){
         }
         set_cell(Board , x , y , new_state);
         unlock_state();
+
+        render_state(Board , stdscr , State_Start_X , State_Start_Y , State_End_X , State_End_Y);
+        refresh();
     }else if(event.x >= Reset_Start_X && event.x <= Reset_End_X && event.y == Reset_Y){
         reset_board(Board);
     }
@@ -138,8 +150,7 @@ void *handle_input(void *arg){
 
     if(ch != KEY_MOUSE){
         handle_keyboard_input(ch);
-    }//else{
-    //}
+    }
 
     flushinp();
 

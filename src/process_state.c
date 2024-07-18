@@ -37,7 +37,6 @@ typedef struct set_target{
 } set_target;
 
 void update_board_state(board_state *state_ptr){
-    //linked_list *set_list = new_linked_list();
     dynamic_array *set_list = new_dynamic_array(sizeof(set_target) , NULL);
     coord *position;
     unsigned char alive_cells = 0;

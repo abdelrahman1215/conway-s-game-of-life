@@ -13,6 +13,7 @@ struct frame {
 
 #define empty_cell (char) 250 // ·
 #define alive_cell (char) 254 // ■ 
+int high_cell_x = -1 , high_cell_y = -1;
 
 frame *new_frame(unsigned width , unsigned height){
     //used <= 0 instead of == 0 although it is unsigned to silence a clang-tidy warning
@@ -96,6 +97,30 @@ frame *translate_state(board_state *state_ptr){
     return ret;
 }
 
+void highlight_cell(unsigned short x , unsigned short y){
+    high_cell_x = x;
+    high_cell_y = y;
+}
+
+void unhighlight_cells(){
+    high_cell_x = -1;
+    high_cell_y = -1;
+}
+
+void highlight_exec(){
+    if(high_cell_x > -1 && high_cell_y > -1){
+        frame *translation = translate_state(Board);
+
+        attron(COLOR_PAIR(cell_highlight_index));
+
+        mvprintw(high_cell_y + 1 , (high_cell_x + 1) * 2 , "%c " , translation -> content[high_cell_y + Y_Indent][high_cell_x + X_Indent]);
+        
+        attroff(COLOR_PAIR(cell_highlight_index));
+
+        destroy_frame(translation);   
+    }
+}
+
 void render_state(board_state *state_ptr , WINDOW *target_win , unsigned start_x , unsigned start_y , unsigned end_x , unsigned end_y){
     if(stdscr == NULL){
         return;
@@ -147,11 +172,10 @@ void render_state(board_state *state_ptr , WINDOW *target_win , unsigned start_x
         pthread_mutex_lock(&IO_Mutex);
 
         mvwprintw(target_win , cur_y , start_x , "%s" , row);
-        
+        highlight_exec();
+
         pthread_mutex_unlock(&IO_Mutex);
     }
-    
-    refresh();
 
 
     destroy_frame(translation);

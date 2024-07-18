@@ -24,8 +24,7 @@ void print_pause_play_state(){
         printw(" playing ");
         attroff(COLOR_PAIR(button_index));
     }
-    refresh();
-
+    
     pthread_mutex_unlock(&IO_Mutex);
 }
 
@@ -74,6 +73,18 @@ void render_exit_button(){
     pthread_mutex_unlock(&IO_Mutex);
 }
 
+void highlight_exit_button(){
+    if(stdscr == NULL) return;
+
+    pthread_mutex_lock(&IO_Mutex);
+
+    attron(COLOR_PAIR(button_highlight_index));
+    mvprintw(Exit_Y , Exit_Start_X , " exit ");
+    attroff(COLOR_PAIR(button_highlight_index));
+
+    pthread_mutex_unlock(&IO_Mutex);
+}
+
 void render_play_pause_button(){
     if(stdscr == NULL) return;
 
@@ -91,7 +102,22 @@ void render_play_pause_button(){
 
 }
 
+void highlight_play_pause_button(){
+    if(stdscr == NULL) return;
+
+    pthread_mutex_lock(&IO_Mutex);
+
+    attron(COLOR_PAIR(button_highlight_index));
+    mvprintw( Play_Y , Play_Start_X , " play / pause ");
+    attroff(COLOR_PAIR(button_highlight_index));
+
+    pthread_mutex_unlock(&IO_Mutex);
+
+}
+
 void render_reset_button(){
+    if(stdscr == NULL) return;
+    
     Reset_Y = Play_Y;
     Reset_End_X = Play_Start_X - 4;
     Reset_Start_X = Reset_End_X - 7;
@@ -101,6 +127,18 @@ void render_reset_button(){
     attron(COLOR_PAIR(button_index));
     mvprintw( Reset_Y , Reset_Start_X , " reset ");
     attroff(COLOR_PAIR(button_index));
+
+    pthread_mutex_unlock(&IO_Mutex);
+}
+
+void highlight_reset_button(){
+    if(stdscr == NULL) return;
+
+    pthread_mutex_lock(&IO_Mutex);
+
+    attron(COLOR_PAIR(button_highlight_index));
+    mvprintw( Reset_Y , Reset_Start_X , " reset ");
+    attroff(COLOR_PAIR(button_highlight_index));
 
     pthread_mutex_unlock(&IO_Mutex);
 }

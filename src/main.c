@@ -11,7 +11,7 @@
 
 
 
-void *render(void *){
+void *render_board(void *){
     Speed = 2;
     const int nano_per_sec = 1000000000;
     struct timespec spec = {.tv_nsec =  nano_per_sec / Speed, .tv_sec = 0};
@@ -26,15 +26,20 @@ void *render(void *){
                 spec.tv_nsec = 0;
             }else{
                 spec.tv_sec = 0;
-                spec.tv_nsec = nano_per_sec / Speed;
+                spec.tv_nsec = (nano_per_sec / Speed) - (nano_per_sec / 100);
             }
             pthread_mutex_unlock(&Speed_Mutex);
-
-            update_board_state(Board);
             
             nanosleep(&spec , NULL);
+            
+            update_board_state(Board);
         }
 
+        spec.tv_nsec = nano_per_sec / 100;
+
+        nanosleep(&spec , NULL);
+
+        refresh();
     }
 }
 
@@ -54,7 +59,6 @@ int main(){
     mousemask(BUTTON1_PRESSED | BUTTON1_CLICKED | BUTTON1_DOUBLE_CLICKED | REPORT_MOUSE_POSITION , NULL);
     mouseinterval(0);
     noecho();
-    //cbreak();
     refresh();
     curs_set(0);
     nodelay(stdscr , true);
@@ -79,9 +83,11 @@ int main(){
 
     init_pair(button_index , COLOR_CYAN , COLOR_BLACK);
     init_pair(box_index , COLOR_BLUE , COLOR_BLACK);
+    init_pair(button_highlight_index , COLOR_BLACK , COLOR_BLUE);
+    init_pair(cell_highlight_index , COLOR_BLACK , COLOR_WHITE);
 
     pthread_t interface_thread , render_thread;
-    pthread_create(&render_thread , NULL , render , NULL );
+    pthread_create(&render_thread , NULL , render_board , NULL );
     pthread_create(&interface_thread , NULL , render_interface , NULL );
 
     while(1){

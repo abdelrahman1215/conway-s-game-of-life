@@ -148,29 +148,26 @@ void *render_interface(void *){
         pthread_exit(0);
     }
 
-    static int called = false;
     static unsigned int last_diplayed_speed = 0;
     static coord last_diplayed_coord = {.x = -1 , .y = -1};
 
-    if(called == false ){
-        render_exit_button();
-        render_play_pause_button();
-        render_reset_button();
-    }
+    pthread_mutex_lock(&IO_Mutex);
 
+    attron(COLOR_PAIR(box_index));
+    box(stdscr , 0 , 0);
+    attron(COLOR_PAIR(box_index));
 
-    if(last_diplayed_speed != Speed){
-        print_speed();
-    }
+    pthread_mutex_unlock(&IO_Mutex);
+    
+    render_exit_button();
+    render_play_pause_button();
+    render_reset_button();
 
-    if(last_diplayed_coord.x != X_Indent || last_diplayed_coord.y != Y_Indent){
-        display_coord();
-    }
-        
+    print_speed();
+    display_coord();   
     print_pause_play_state();
 
 
-    called = true;
     last_diplayed_speed = Speed;
     last_diplayed_coord.x = X_Indent;
     last_diplayed_coord.y = Y_Indent;

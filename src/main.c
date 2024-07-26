@@ -11,40 +11,7 @@
 
 
 
-void *render_board(void *){
-    Speed = 2;
-    const int nano_per_sec = 1000000000;
-    struct timespec spec = {.tv_nsec =  nano_per_sec / Speed, .tv_sec = 0};
-
-    while(1){
-        render_state(Board , stdscr , State_Start_X , State_Start_Y , State_End_X , State_End_Y);
-
-        if(Pause == false){
-            pthread_mutex_lock(&Speed_Mutex);
-            if(Speed == 1){
-                spec.tv_sec = 1;
-                spec.tv_nsec = 0;
-            }else{
-                spec.tv_sec = 0;
-                spec.tv_nsec = (nano_per_sec / Speed) - (nano_per_sec / 100);
-            }
-            pthread_mutex_unlock(&Speed_Mutex);
-            
-            nanosleep(&spec , NULL);
-            
-            //checks if the the game is still playing after the sleeping period
-            if(Pause == false){
-                update_board_state(Board);
-            }
-        }
-
-        spec.tv_nsec = nano_per_sec / 100;
-
-        nanosleep(&spec , NULL);
-
-        refresh();
-    }
-}
+void *render_board(void *);
 
 int main(){
     pthread_mutex_init(&IO_Mutex , NULL);
@@ -100,4 +67,39 @@ int main(){
 
 
     destroy_board_state(Board);
+}
+
+void *render_board(void *){
+    Speed = 2;
+    const int nano_per_sec = 1000000000;
+    struct timespec spec = {.tv_nsec =  nano_per_sec / Speed, .tv_sec = 0};
+
+    while(1){
+        render_state(Board , stdscr , State_Start_X , State_Start_Y , State_End_X , State_End_Y);
+
+        if(Pause == false){
+            pthread_mutex_lock(&Speed_Mutex);
+            if(Speed == 1){
+                spec.tv_sec = 1;
+                spec.tv_nsec = 0;
+            }else{
+                spec.tv_sec = 0;
+                spec.tv_nsec = (nano_per_sec / Speed) - (nano_per_sec / 100);
+            }
+            pthread_mutex_unlock(&Speed_Mutex);
+            
+            nanosleep(&spec , NULL);
+            
+            //checks if the the game is still playing after the sleeping period
+            if(Pause == false){
+                update_board_state(Board);
+            }
+        }
+
+        spec.tv_nsec = nano_per_sec / 100;
+
+        nanosleep(&spec , NULL);
+
+        refresh();
+    }
 }

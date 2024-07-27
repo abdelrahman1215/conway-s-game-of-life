@@ -150,14 +150,6 @@ void *render_interface(void *){
 
     static unsigned int last_diplayed_speed = 0;
     static coord last_diplayed_coord = {.x = -1 , .y = -1};
-
-    pthread_mutex_lock(&IO_Mutex);
-
-    attron(COLOR_PAIR(box_index));
-    box(stdscr , 0 , 0);
-    attron(COLOR_PAIR(box_index));
-
-    pthread_mutex_unlock(&IO_Mutex);
     
     render_exit_button();
     render_play_pause_button();
@@ -166,7 +158,6 @@ void *render_interface(void *){
     print_speed();
     display_coord();   
     print_pause_play_state();
-
 
     last_diplayed_speed = Speed;
     last_diplayed_coord.x = X_Indent;

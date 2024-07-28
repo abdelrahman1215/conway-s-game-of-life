@@ -34,7 +34,7 @@ int main(){
 
     attron(COLOR_PAIR(box_index));
     box(stdscr , 0 , 0);
-    attron(COLOR_PAIR(box_index));
+    attroff(COLOR_PAIR(box_index));
 
     Win_Width = getmaxx(stdscr) ;
     Win_Height = getmaxy(stdscr);

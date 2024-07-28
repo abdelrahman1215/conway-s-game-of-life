@@ -148,12 +148,15 @@ void *render_interface(void *){
         pthread_exit(0);
     }
 
+    static bool called = false; 
     static unsigned int last_diplayed_speed = 0;
     static coord last_diplayed_coord = {.x = -1 , .y = -1};
     
-    render_exit_button();
-    render_play_pause_button();
-    render_reset_button();
+    if(called == false){
+        render_exit_button();
+        render_play_pause_button();
+        render_reset_button();
+    }
 
     print_speed();
     display_coord();   
@@ -162,6 +165,7 @@ void *render_interface(void *){
     last_diplayed_speed = Speed;
     last_diplayed_coord.x = X_Indent;
     last_diplayed_coord.y = Y_Indent;
+    called = true;
 
     return NULL;
 }

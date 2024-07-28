@@ -4,6 +4,7 @@
 #include <pdcurses.h>
 #include <pthread.h>
 #include <stddef.h>
+#include <math.h>
 
 bool play_button_high = false , exit_button_high = false , reset_button_high = false;
 
@@ -17,10 +18,6 @@ void print_pause_play_state(){
         attron(COLOR_PAIR(button_index));
         printw(" paused ");
         attroff(COLOR_PAIR(button_index));
-        
-        attron(COLOR_PAIR(2));
-        printw("%c" , 196 );
-        attroff(COLOR_PAIR(2));
     }else{
         attron(COLOR_PAIR(button_index));
         printw(" playing ");
@@ -33,13 +30,10 @@ void print_pause_play_state(){
 void display_coord(void ){
     pthread_mutex_lock(&IO_Mutex);
 
+
     attron(COLOR_PAIR(button_index));
     mvprintw( 0 , 2 , " %i , %i " , X_Indent , Y_Indent );
     attroff(COLOR_PAIR(button_index));
-
-    attron(COLOR_PAIR(2));
-    printw("%c%c%c%c" , 196 , 196 , 196 , 196 );
-    attroff(COLOR_PAIR(2));
 
     pthread_mutex_unlock(&IO_Mutex);
 
@@ -51,10 +45,6 @@ void print_speed(){
     attron(COLOR_PAIR(button_index));
     mvprintw( Play_Y , Play_End_X + 4 , " %ix " , Speed);
     attroff(COLOR_PAIR(button_index));
-
-    attron(COLOR_PAIR(2));
-    printw("%c%c" , 196 , 196 );
-    attroff(COLOR_PAIR(2));
 
     pthread_mutex_unlock(&IO_Mutex);   
 }
@@ -149,19 +139,24 @@ void *render_interface(void *){
     static int called = false;
     static unsigned int last_diplayed_speed = 0;
     static coord last_diplayed_coord = {.x = -1 , .y = -1};
+    static bool last_diplayed_play_pause_state = true;
+
+    if(log10(last_diplayed_coord.x) != log10(X_Indent) || log10(last_diplayed_coord.y) != log10(Y_Indent) || last_diplayed_play_pause_state != Pause || last_diplayed_speed != Speed){
+        pthread_mutex_lock(&IO_Mutex);
+
+        attron(COLOR_PAIR(box_index));
+        box(stdscr , 0 , 0);
+        attroff(COLOR_PAIR(box_index));
+
+        pthread_mutex_unlock(&IO_Mutex);
+    }
 
     render_play_pause_button();
     render_reset_button();
     render_exit_button();
 
-    if(last_diplayed_speed != Speed){
-        print_speed();
-    }
-
-    if(last_diplayed_coord.x != X_Indent || last_diplayed_coord.y != Y_Indent){
-        display_coord();
-    }
-        
+    print_speed();
+    display_coord();
     print_pause_play_state();
 
 
@@ -169,6 +164,9 @@ void *render_interface(void *){
     last_diplayed_speed = Speed;
     last_diplayed_coord.x = X_Indent;
     last_diplayed_coord.y = Y_Indent;
+    last_diplayed_play_pause_state = Pause;
+    
+    refresh();
 
     return NULL;
 }

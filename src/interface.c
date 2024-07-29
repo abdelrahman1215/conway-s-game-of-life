@@ -164,13 +164,10 @@ void *render_interface(void *){
     last_diplayed_speed = Speed;
     last_diplayed_coord.x = X_Indent;
     last_diplayed_coord.y = Y_Indent;
-<<<<<<< HEAD
     called = true;
-=======
     last_diplayed_play_pause_state = Pause;
     
     refresh();
->>>>>>> highlight
 
     return NULL;
 }

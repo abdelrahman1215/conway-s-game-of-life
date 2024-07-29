@@ -98,17 +98,28 @@ frame *translate_state(board_state *state_ptr){
 }
 
 void highlight_cell(unsigned short x , unsigned short y){
+    pthread_mutex_lock(&High_Mutex);
+
     high_cell_x = x;
     high_cell_y = y;
+
+    pthread_mutex_unlock(&High_Mutex);
 }
 
 void unhighlight_cells(){
+    pthread_mutex_lock(&High_Mutex);
+
     high_cell_x = -1;
     high_cell_y = -1;
+
+    pthread_mutex_unlock(&High_Mutex);
 }
 
 void highlight_exec(){
-    if(high_cell_x > -1 && high_cell_y > -1 && (high_cell_x + 1) * 2 < Win_Width - 2){
+    pthread_mutex_lock(&High_Mutex);
+
+    if(high_cell_x > -1 && high_cell_y > -1 && (high_cell_x + 1) * 2 < (int)Win_Width - 2){
+
         frame *translation = translate_state(Board);
 
         attron(COLOR_PAIR(cell_highlight_index));
@@ -119,6 +130,8 @@ void highlight_exec(){
 
         destroy_frame(translation);   
     }
+
+    pthread_mutex_unlock(&High_Mutex);
 }
 
 void render_state(board_state *state_ptr , WINDOW *target_win , unsigned start_x , unsigned start_y , unsigned end_x , unsigned end_y){

@@ -13,6 +13,11 @@ void highlight_exit_button();
 void highlight_play_pause_button();
 void highlight_reset_button();
 
+
+void unhighlight_exit_button();
+void unhighlight_play_pause_button();
+void unhighlight_reset_button();
+
 void *render_interface(void *);
 
 #endif

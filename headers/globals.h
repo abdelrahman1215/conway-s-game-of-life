@@ -19,7 +19,6 @@ GLOBAL unsigned Reset_Start_X , Reset_End_X ,  Reset_Y ;
 GLOBAL bool Pause;
 GLOBAL unsigned X_Indent , Y_Indent;
 GLOBAL unsigned Win_Width , Win_Height;
-GLOBAL pthread_mutex_t IO_Mutex;
-GLOBAL pthread_mutex_t Speed_Mutex;
+GLOBAL pthread_mutex_t IO_Mutex , Speed_Mutex , High_Mutex;
 
 #endif

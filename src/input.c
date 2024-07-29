@@ -19,9 +19,9 @@ void handle_mouse_input(int ch){
     if(nc_getmouse(&event) != OK) return ;
 
     if(event.x != Last_X || event.y != Last_Y){
-        render_exit_button();
-        render_play_pause_button();
-        render_reset_button();
+        unhighlight_exit_button();
+        unhighlight_play_pause_button();
+        unhighlight_reset_button();
         unhighlight_cells();
 
         if(event.x >= Play_Start_X && event.x <= Play_End_X && event.y == Play_Y){

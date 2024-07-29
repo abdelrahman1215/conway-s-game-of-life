@@ -14,6 +14,7 @@ void *render_board(void *);
 int main(){
     pthread_mutex_init(&IO_Mutex , NULL);
     pthread_mutex_init(&Speed_Mutex , NULL);
+    pthread_mutex_init(&High_Mutex , NULL);
 
     Pause = true;
 

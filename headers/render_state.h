@@ -2,7 +2,7 @@
 #define TRANSLATE_STATE_H
 
 #include "../headers/board_state.h"
-#include <pdcurses.h>
+#include <ncursesw/curses.h>
 
 #define cell_highlight_index 4
 

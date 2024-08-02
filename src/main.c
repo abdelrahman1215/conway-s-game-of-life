@@ -5,7 +5,7 @@
 #include "../headers/globals.h"
 #include "../headers/input.h"
 
-#include <pdcurses.h>
+#include <ncursesw/curses.h>
 #include <assert.h>
 #include <time.h>
 
@@ -24,7 +24,7 @@ int main(){
 
     start_color();
     keypad(stdscr , true);
-    mousemask(BUTTON1_PRESSED | BUTTON1_CLICKED | BUTTON1_DOUBLE_CLICKED | REPORT_MOUSE_POSITION , NULL);
+    mousemask(BUTTON1_PRESSED | REPORT_MOUSE_POSITION , NULL);
     mouseinterval(0);
     noecho();
     refresh();

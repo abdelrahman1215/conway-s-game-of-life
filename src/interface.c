@@ -1,7 +1,7 @@
 #include "../headers/globals.h"
 #include "../headers/interface.h"
 #include "../headers/board_state.h"
-#include <pdcurses.h>
+#include <ncursesw/curses.h>
 #include <pthread.h>
 #include <stddef.h>
 #include <math.h>

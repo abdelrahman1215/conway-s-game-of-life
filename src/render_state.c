@@ -2,7 +2,7 @@
 #include "../headers/render_state.h"
 #include "../headers/board_state.h"
 #include "../headers/globals.h"
-#include <pthread.h>
+#include <ncursesw/curses.h>
 #include <stdlib.h>
 
 struct frame {
@@ -11,8 +11,8 @@ struct frame {
     char **content;
 };
 
-#define empty_cell (char) 250 // ·
-#define alive_cell (char) 254 // ■ 
+#define empty_cell (char) '.' // ·
+#define alive_cell (char) '#' // ■ 
 int high_cell_x = -1 , high_cell_y = -1;
 
 frame *new_frame(unsigned width , unsigned height){

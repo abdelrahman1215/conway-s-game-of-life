@@ -2,7 +2,7 @@ CC = gcc
 Data_Structures_Path = c_datastructures/bin/
 
 main: objects deps
-	$(CC) -g3 -o conway src/main.c bin/board_state.o bin/process_state.o bin/render_state.o bin/interface.o bin/input.o -lpdcurses -L$(Data_Structures_Path) -llinked_list -ldynamic_array
+	$(CC) -g3 -o conway src/main.c bin/board_state.o bin/process_state.o bin/render_state.o bin/interface.o bin/input.o -lncursesw -L$(Data_Structures_Path) -llinked_list -ldynamic_array -lm
 
 objects: bin/
 	$(CC) -g3 -c src/process_state.c -o bin/process_state.o

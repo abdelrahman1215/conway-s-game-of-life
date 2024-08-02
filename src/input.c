@@ -2,7 +2,7 @@
 #include "../headers/interface.h"
 #include "../headers/board_state.h"
 #include "../headers/render_state.h"
-#include <pdcurses.h>
+#include <ncursesw/curses.h>
 #include <pthread.h>
 
 void quit(){
@@ -16,7 +16,7 @@ void handle_mouse_input(int ch){
     MEVENT event;
     static int Last_X = -1 , Last_Y = -1;
 
-    if(nc_getmouse(&event) != OK) return ;
+    if(getmouse(&event) != OK) return ;
 
     if(event.x != Last_X || event.y != Last_Y){
         unhighlight_exit_button();
@@ -69,7 +69,7 @@ void handle_keyboard_input(int input){
     switch(input){
         case 'q':
         case 'Q':
-            exit(0);
+            quit();
             break;
 
         case ' ':

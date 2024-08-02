@@ -24,7 +24,7 @@ int main(){
 
     start_color();
     keypad(stdscr , true);
-    mousemask(BUTTON1_PRESSED | REPORT_MOUSE_POSITION , NULL);
+    mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION , NULL);
     mouseinterval(0);
     noecho();
     refresh();

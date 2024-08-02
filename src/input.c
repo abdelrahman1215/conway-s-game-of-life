@@ -42,7 +42,7 @@ void handle_mouse_input(int ch){
     Last_X = event.x;
     Last_Y = event.y;
 
-    if(ch != KEY_MOUSE || (event.bstate & BUTTON1_PRESSED) == 0) return ;
+    if(ch != KEY_MOUSE || (event.bstate & (BUTTON1_PRESSED | BUTTON1_CLICKED | BUTTON1_DOUBLE_CLICKED)) == 0) return ;
 
     if(event.x >= Play_Start_X && event.x <= Play_End_X && event.y == Play_Y){
         Pause = !Pause;

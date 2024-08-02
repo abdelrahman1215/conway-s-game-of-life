@@ -69,7 +69,7 @@ void handle_keyboard_input(int input){
     switch(input){
         case 'q':
         case 'Q':
-            exit(0);
+            quit();
             break;
 
         case ' ':
